@@ -6,10 +6,16 @@ export type Workflow = {
   steps: string[];
 };
 
+export type MessageAction = {
+  label: string;
+  value: string;
+};
+
 export type Message = {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  actions?: MessageAction[];
 };
 
 export type PanelView = 

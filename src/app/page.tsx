@@ -12,7 +12,11 @@ const initialMessages: Message[] = [
   {
     id: 'init',
     role: 'assistant',
-    content: "Hello! I'm Ethan, your AI strategy consultant. To start, select a workflow from the sidebar, or tell me a bit about your business and your primary goals. This will help me tailor our conversation.",
+    content: "Hello! I'm Ethan, your AI strategy consultant. What would you like to focus on today?",
+    actions: [
+      { label: '🚀 Discovery', value: "Let's explore Discovery workflows." },
+      { label: '💡 Marketing Strategy', value: 'I want to work on some Marketing Strategy workflows.' },
+    ]
   }
 ];
 
@@ -26,7 +30,7 @@ export default function Home() {
       {
         id: 'init',
         role: 'assistant',
-        content: `Great! Let's start with the "${workflow.name}" workflow.\n\nThe first step is: **${workflow.steps[0]}**.\n\nHow would you like to approach this? We can discuss it, you can provide some initial thoughts, or I can ask some guiding questions.`
+        content: `Great! Let's start with the "${workflow.name}" workflow.\n\nThe first step is: **${workflow.steps[0]}**.\n\nUse the panel on the right to navigate steps, and let's discuss your approach here.`
       }
     ]);
   };

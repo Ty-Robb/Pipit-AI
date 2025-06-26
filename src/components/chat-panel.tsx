@@ -23,7 +23,6 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
-    const scrollAreaRef = useRef<HTMLDivElement>(null);
     const viewportRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -32,24 +31,13 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
         }
     }, [messages]);
 
-    const handleSendMessage = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!input.trim() || isLoading) return;
-
-        const userMessage: Message = {
-            id: Date.now().toString(),
-            role: 'user',
-            content: input,
-        };
-
-        setMessages((prev) => [...prev, userMessage]);
-        setInput('');
+    const sendMessage = async (messageContent: string) => {
         setIsLoading(true);
 
         try {
-            const context = messages.slice(-5).map(m => `${m.role}: ${m.content}`).join('\n');
+            const context = [...messages.slice(-5), { role: 'user', content: messageContent, id: '' }].map(m => `${m.role}: ${m.content}`).join('\n');
 
-            const result = await aiConsultantGuidance({ message: input, context });
+            const result = await aiConsultantGuidance({ message: messageContent, context });
 
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
@@ -65,11 +53,43 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                 title: 'Error',
                 description: 'Failed to get a response from Ethan. Please try again.',
             });
+            // Revert the user message if AI fails
             setMessages(prev => prev.slice(0, -1));
         } finally {
             setIsLoading(false);
         }
+    }
+
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!input.trim() || isLoading) return;
+
+        const userMessage: Message = {
+            id: Date.now().toString(),
+            role: 'user',
+            content: input,
+        };
+
+        setMessages((prev) => [...prev, userMessage]);
+        const messageToSend = input;
+        setInput('');
+        await sendMessage(messageToSend);
     };
+
+    const handleActionClick = async (value: string) => {
+        if (isLoading) return;
+
+        // Remove actions from the message to prevent re-clicking
+        const updatedMessages = messages.map(m => ({ ...m, actions: undefined }));
+
+        const userMessage: Message = {
+            id: Date.now().toString(),
+            role: 'user',
+            content: value,
+        };
+        setMessages([...updatedMessages, userMessage]);
+        await sendMessage(value);
+    }
 
     return (
         <div className="flex flex-col h-full">
@@ -86,6 +106,15 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                             )}
                             <div className={cn("rounded-lg px-3 py-2 max-w-[80%]", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
                                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                {message.actions && (
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                        {message.actions.map((action, index) => (
+                                            <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
+                                                {action.label}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             {message.role === 'user' && (
                                  <Avatar className="h-8 w-8">
@@ -109,7 +138,7 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                 </div>
             </ScrollArea>
              <div className="mt-4 p-1 bg-muted/30 rounded-lg border">
-                <form onSubmit={handleSendMessage} className="flex w-full items-center">
+                <form onSubmit={handleFormSubmit} className="flex w-full items-center">
                     <Textarea
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -119,7 +148,7 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                                 e.preventDefault();
-                                handleSendMessage(e);
+                                handleFormSubmit(e);
                             }
                         }}
                         disabled={isLoading}
