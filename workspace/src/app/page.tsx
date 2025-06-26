@@ -11,13 +11,14 @@ import { ChatPanel } from '@/components/chat-panel';
 import { StrategicOutputPanel } from '@/components/strategic-output-panel';
 import { workflows } from '@/data/workflows';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAuth } from '@/context/AuthContext';
+
+import { AuthContext } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [activeWorkflow, setActiveWorkflow] = useState<Workflow | null>(null);
-  const { user, loading } = useAuth();
+  const { user, loading } = useContext(AuthContext);
   const [activePanel, setActivePanel] = useState<PanelView>('welcome');
   const [strategicInsights, setStrategicInsights] = useState<string | null>(null);
   const [workflowOutputs, setWorkflowOutputs] = useState<Record<string, string>>({});
@@ -144,7 +145,7 @@ export default function Home() {
                         <div className="p-6">
                             <StrategicOutputPanel
                                 activePanel={activePanel}
-                                setActivePanel={setActivePanel}
+                                setActivePanel={handlePanelChange}
                                 workflow={activeWorkflow}
                                 strategicInsights={strategicInsights}
                                 onStartConversation={startConversation}
