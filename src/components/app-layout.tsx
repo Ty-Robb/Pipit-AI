@@ -15,7 +15,13 @@ import { BrainCircuit, FileText } from 'lucide-react';
 export function AppLayout() {
   const [activeWorkflow, setActiveWorkflow] = useState<Workflow | null>(null);
   const [activeView, setActiveView] = useState<PanelView>('welcome');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '0',
+      role: 'assistant',
+      content: "Welcome to Pipit AI! I'm Ethan, your strategy wingman. Are you looking to do some discovery work, or are you ready to start building your strategy?",
+    }
+  ]);
   const [strategicInsights, setStrategicInsights] = useState<string | null>(null);
 
   const handleWorkflowSelect = (workflow: Workflow) => {
