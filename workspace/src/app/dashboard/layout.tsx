@@ -19,13 +19,15 @@ export default function DashboardLayout({
     }
   }, [user, loading, router])
 
-  if (loading || !user) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    )
-  }
-
-  return <SidebarProvider>{children}</SidebarProvider>
+  return (
+    <SidebarProvider>
+      {loading || !user ? (
+        <div className="flex h-screen w-full items-center justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+      ) : (
+        children
+      )}
+    </SidebarProvider>
+  )
 }
