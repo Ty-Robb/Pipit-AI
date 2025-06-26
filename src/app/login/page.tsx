@@ -1,13 +1,8 @@
-"use client"
-
 import { GalleryVerticalEnd } from "lucide-react"
-import { useState } from 'react';
 
 import { LoginForm } from "@/components/login-form"
-import { SignupForm } from "@/components/signup-form";
 
 export default function LoginPage() {
-  const [isLogin, setIsLogin] = useState(true);
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -21,10 +16,7 @@ export default function LoginPage() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            {isLogin ? (<LoginForm onSignupClick={() => setIsLogin(false)} />) : (
-              <div>Signup Form Placeholder <button onClick={() => setIsLogin(true)}>Go to Login</button></div>
-              // Once SignupForm is implemented: <SignupForm onLoginClick={() => setIsLogin(true)} />
-            )}
+            <LoginForm />
           </div>
         </div>
       </div>
