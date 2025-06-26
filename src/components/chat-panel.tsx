@@ -44,7 +44,6 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
         if(isLoading) return;
 
         setIsLoading(true);
-        isSendingInitialMessage.current = false;
 
         try {
             const context = [...messages.slice(-5), { role: 'user', content: messageContent, id: '' }].map(m => `${m.role}: ${m.content}`).join('\n');
