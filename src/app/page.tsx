@@ -110,7 +110,7 @@ export default function Home() {
     <>
       <AppSidebar onWorkflowSelect={handleWorkflowSelect} activeWorkflow={activeWorkflow} />
       <SidebarInset>
-        <div className="flex flex-col h-screen bg-background text-foreground">
+        <div className="flex flex-col h-full bg-background text-foreground md:rounded-xl overflow-hidden">
           <PageHeader />
           <main className="flex-1 flex flex-col p-6 md:p-8 overflow-hidden">
               <div className="flex-1 flex items-center justify-center overflow-y-auto pb-8">
