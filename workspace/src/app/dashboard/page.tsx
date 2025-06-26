@@ -129,7 +129,7 @@ export default function DashboardPage() {
                 />
               </div>
             ) : (
-              <ResizablePanelGroup direction="horizontal" className="h-full items-stretch">
+              <ResizablePanelGroup direction="horizontal" className="h-full">
                   <ResizablePanel defaultSize={50} minSize={30}>
                       <ChatPanel 
                         messages={messages} 
