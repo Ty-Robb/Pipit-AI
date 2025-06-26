@@ -56,13 +56,12 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
 
             // Placeholder for agentic step completion.
             // In a real scenario, the AI response would indicate if a step is complete.
-            // For now, we could simulate it.
-            // if (result.response.toLowerCase().includes("great, let's move to")) {
-            //   const completedStep = activeWorkflow?.steps.find(step => context.toLowerCase().includes(step.toLowerCase()));
-            //   if(completedStep) {
-            //      onStepComplete(completedStep, "This is a placeholder for the generated output of the completed step.");
-            //   }
-            // }
+            if (result.response.toLowerCase().includes("great, let's move to")) {
+              const completedStep = activeWorkflow?.steps.find(step => context.toLowerCase().includes(step.toLowerCase()));
+              if(completedStep) {
+                 onStepComplete(completedStep, "This is a placeholder for the generated output of the completed step.");
+              }
+            }
 
         } catch (error) {
             console.error('Error with AI Consultant:', error);
@@ -135,8 +134,8 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
     }
 
     return (
-        <div className="flex flex-col h-full p-6">
-            <div className="flex-1 space-y-4 overflow-y-auto pb-4 pr-4 -mr-4">
+        <div className="flex flex-col h-full">
+            <div className="flex-1 space-y-4 overflow-y-auto p-6">
                 {messages.map((message) => (
                     <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
                         {message.role === 'assistant' && (
@@ -179,7 +178,7 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
                 )}
                 <div ref={messagesEndRef} />
             </div>
-            <div className="pt-4">
+            <div className="px-6 pb-6 pt-2">
                 <div className="p-1 bg-background border rounded-lg shadow-sm">
                   <form onSubmit={handleFormSubmit} className="flex w-full items-center">
                       <Textarea
