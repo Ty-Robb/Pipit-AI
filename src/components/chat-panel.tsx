@@ -9,7 +9,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { BrainCircuit, User, Send, Loader2, Paperclip } from 'lucide-react';
+import { User, Send, Loader2, Paperclip } from 'lucide-react';
+import { AssistantIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
 
@@ -23,10 +24,11 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const scrollAreaRef = useRef<HTMLDivElement>(null);
+    const viewportRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (scrollAreaRef.current) {
-            scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+        if (viewportRef.current) {
+            viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
         }
     }, [messages]);
 
@@ -70,14 +72,16 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
     };
 
     return (
-        <div className="flex flex-col h-[calc(100vh-8rem)] bg-background rounded-lg border">
-            <ScrollArea className="flex-grow p-4">
+        <div className="flex flex-col h-full">
+            <ScrollArea className="flex-grow pr-4 -mr-4" viewportRef={viewportRef}>
                 <div className="space-y-4">
                     {messages.map((message) => (
                         <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
                             {message.role === 'assistant' && (
                                 <Avatar className="h-8 w-8">
-                                    <AvatarFallback className="bg-primary/10 text-primary"><BrainCircuit size={20} /></AvatarFallback>
+                                    <AvatarFallback className="bg-primary/10 text-primary">
+                                        <AssistantIcon className="h-5 w-5" />
+                                    </AvatarFallback>
                                 </Avatar>
                             )}
                             <div className={cn("rounded-lg px-3 py-2 max-w-[80%]", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
@@ -93,7 +97,9 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                      {isLoading && (
                         <div className="flex items-start gap-3">
                             <Avatar className="h-8 w-8">
-                                <AvatarFallback className="bg-primary/10 text-primary"><BrainCircuit size={20} /></AvatarFallback>
+                                <AvatarFallback className="bg-primary/10 text-primary">
+                                    <AssistantIcon className="h-5 w-5" />
+                                </AvatarFallback>
                             </Avatar>
                             <div className="rounded-lg px-3 py-2 bg-secondary flex items-center">
                                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -102,13 +108,13 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                     )}
                 </div>
             </ScrollArea>
-             <div className="border-t p-2">
-                <form onSubmit={handleSendMessage} className="flex w-full items-center space-x-2">
+             <div className="mt-4 p-1 bg-muted/30 rounded-lg border">
+                <form onSubmit={handleSendMessage} className="flex w-full items-center">
                     <Textarea
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Type your message..."
-                        className="min-h-1 flex-1 border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 resize-none"
                         rows={1}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
@@ -119,7 +125,7 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                         disabled={isLoading}
                     />
                      <Button type="button" variant="ghost" size="icon" disabled={isLoading}>
-                        <Paperclip className="h-4 w-4" />
+                        <Paperclip className="h-5 w-5 text-muted-foreground" />
                         <span className="sr-only">Attach file</span>
                     </Button>
                     <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
