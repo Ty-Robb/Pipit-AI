@@ -11,25 +11,36 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings, MoreHorizontal } from "lucide-react";
 
 export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="profile person" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
+        <Button variant="ghost" className="w-full justify-start h-auto p-2">
+            <div className="flex justify-between w-full items-center">
+                <div className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="profile person" />
+                        <AvatarFallback>N</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col items-start text-left">
+                        <p className="text-sm font-medium leading-none">Tyrone Robb</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                        tyrone.robb@icloud.com
+                        </p>
+                    </div>
+                </div>
+                <MoreHorizontal className="h-4 w-4" />
+            </div>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">User</p>
+            <p className="text-sm font-medium leading-none">Tyrone Robb</p>
             <p className="text-xs leading-none text-muted-foreground">
-              user@example.com
+              tyrone.robb@icloud.com
             </p>
           </div>
         </DropdownMenuLabel>

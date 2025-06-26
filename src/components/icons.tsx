@@ -1,13 +1,16 @@
 export const PipitLogo = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path d="M8 3H14.5C17.5376 3 20 5.46243 20 8.5C20 11.5376 17.5376 14 14.5 14H11V21H8V3ZM11 6V11H14.5C15.8807 11 17 9.88071 17 8.5C17 7.11929 15.8807 6 14.5 6H11Z" />
-    </svg>
-  );
-  
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" fill="currentColor" />
+    <path
+      d="M10 8V16H12.5C14.433 16 16 14.433 16 12.5C16 10.567 14.433 9 12.5 9H10V8ZM12.5 11H12V14H12.5C13.3284 14 14 13.3284 14 12.5C14 11.6716 13.3284 11 12.5 11Z"
+      fill="white"
+    />
+  </svg>
+);
