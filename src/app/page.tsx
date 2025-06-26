@@ -106,12 +106,41 @@ export default function Home() {
 
   const showChat = messages.length > 0;
 
+  // Logic for dynamic breadcrumbs
+  let pageTitle = "Dashboard";
+  let parent;
+
+  if (activeWorkflow) {
+    parent = activeWorkflow.category;
+    pageTitle = activeWorkflow.name;
+  } else {
+    switch(activePanel) {
+      case 'website_assessment':
+        parent = 'Tools';
+        pageTitle = 'Website Assessment';
+        break;
+      case 'document_insights':
+        parent = 'Tools';
+        pageTitle = 'Document Insights';
+        break;
+      case 'content_generation':
+        parent = 'Tools';
+        pageTitle = 'Content Generation';
+        break;
+      case 'welcome':
+      default:
+        parent = undefined;
+        pageTitle = 'Dashboard';
+        break;
+    }
+  }
+
   return (
     <>
       <AppSidebar onWorkflowSelect={handleWorkflowSelect} activeWorkflow={activeWorkflow} />
       <SidebarInset>
         <div className="flex flex-col h-full bg-background text-foreground md:rounded-xl overflow-hidden">
-          <PageHeader />
+          <PageHeader parent={parent} pageTitle={pageTitle} />
           <main className="flex-1 flex flex-col p-6 md:p-8 overflow-hidden">
               <div className="flex-1 flex items-center justify-center overflow-y-auto pb-8">
                  {showChat ? (
