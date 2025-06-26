@@ -13,8 +13,8 @@ interface WorkflowPanelProps {
 export function WorkflowPanel({ workflow, workflowOutputs }: WorkflowPanelProps) {
     if (!workflow) {
         return (
-            <Card className="h-full flex items-center justify-center">
-                <CardContent>
+            <Card>
+                <CardContent className="pt-6">
                     <p className="text-muted-foreground">Select a workflow to begin.</p>
                 </CardContent>
             </Card>
@@ -22,12 +22,12 @@ export function WorkflowPanel({ workflow, workflowOutputs }: WorkflowPanelProps)
     }
 
     return (
-        <Card className="h-full flex flex-col">
+        <Card>
             <CardHeader>
                 <CardTitle className="font-headline text-2xl">{workflow.name}</CardTitle>
                 <CardDescription>{workflow.description}</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow">
+            <CardContent>
                 <h3 className="font-semibold mb-4 text-sm uppercase text-muted-foreground">Workflow Output</h3>
                 <div className="space-y-6">
                     {workflow.steps.map((step, index) => {

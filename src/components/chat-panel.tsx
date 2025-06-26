@@ -136,8 +136,8 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
     }
 
     return (
-        <div className="flex flex-col h-full overflow-hidden">
-            <div className="flex-1 overflow-y-auto" ref={scrollContainerRef}>
+        <div className="flex flex-col h-full">
+            <div className="flex-grow overflow-y-auto" ref={scrollContainerRef}>
                 <div className="space-y-4 p-6">
                     {messages.map((message) => (
                         <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
@@ -181,7 +181,7 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
                     )}
                 </div>
             </div>
-            <div className="px-6 pb-6 pt-2 border-t">
+            <div className="flex-shrink-0 px-6 pb-6 pt-2 border-t">
                 <div className="p-1 bg-background border rounded-lg shadow-sm">
                   <form onSubmit={handleFormSubmit} className="flex w-full items-center">
                       <Textarea

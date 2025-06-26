@@ -37,7 +37,7 @@ export default function Home() {
         const discoveryWorkflow = workflows.find(wf => wf.category === 'Discovery');
         if(discoveryWorkflow) setActiveWorkflow(discoveryWorkflow);
       } else if (messageContent.toLowerCase().includes('marketing strategy')) {
-        const strategyWorkflow = workflows.find(wf => wf.category === 'Go-to-Market');
+        const strategyWorkflow = workflows.find(wf => wf.category === 'Go-to-Market' && wf.name === 'Launch Plan');
         if(strategyWorkflow) setActiveWorkflow(strategyWorkflow);
       }
 
@@ -99,7 +99,7 @@ export default function Home() {
           <PageHeader parent={parent} pageTitle={pageTitle} />
           <main className="flex-1 overflow-hidden">
             {activePanel === 'welcome' ? (
-              <div className="h-full p-6 overflow-y-auto">
+              <div className="h-full overflow-y-auto">
                 <StrategicOutputPanel
                   activePanel={activePanel}
                   setActivePanel={handlePanelChange}
@@ -120,15 +120,17 @@ export default function Home() {
                   </ResizablePanel>
                   <ResizableHandle withHandle />
                   <ResizablePanel defaultSize={50} minSize={30}>
-                      <div className="h-full p-6 overflow-y-auto">
-                          <StrategicOutputPanel
-                              activePanel={activePanel}
-                              setActivePanel={handlePanelChange}
-                              workflow={activeWorkflow}
-                              strategicInsights={strategicInsights}
-                              onStartConversation={startConversation}
-                              workflowOutputs={workflowOutputs}
-                          />
+                      <div className="h-full overflow-y-auto">
+                        <div className="p-6">
+                            <StrategicOutputPanel
+                                activePanel={activePanel}
+                                setActivePanel={handlePanelChange}
+                                workflow={activeWorkflow}
+                                strategicInsights={strategicInsights}
+                                onStartConversation={startConversation}
+                                workflowOutputs={workflowOutputs}
+                            />
+                        </div>
                       </div>
                   </ResizablePanel>
               </ResizablePanelGroup>
