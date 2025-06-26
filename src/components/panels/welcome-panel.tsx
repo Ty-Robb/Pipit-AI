@@ -43,7 +43,7 @@ export function WelcomePanel({ setActivePanel, onStartConversation }: WelcomePan
                 How would you like to begin? Choose an option below to start a conversation with Ethan, or select a specific workflow from the sidebar.
             </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {actionCards.map((card, index) => (
                 <Card key={index} className="flex flex-col hover:border-primary/50 hover:shadow-lg transition-all duration-200">
                     <CardHeader>
