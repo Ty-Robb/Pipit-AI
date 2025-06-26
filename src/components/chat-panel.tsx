@@ -11,6 +11,7 @@ import { User, Loader2, Send, Paperclip } from 'lucide-react';
 import { AssistantIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
+import { ScrollArea } from './ui/scroll-area';
 
 interface ChatPanelProps {
     messages: Message[];
@@ -23,13 +24,11 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
     const isSendingInitialMessage = useRef(false);
 
     const scrollToBottom = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
-        }
+        messagesEndRef.current?.scrollIntoView();
     };
 
     useEffect(() => {
@@ -137,8 +136,8 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto" ref={scrollContainerRef}>
-                <div className="space-y-4 p-6">
+            <ScrollArea className="flex-1">
+                <div className="p-6 space-y-4">
                     {messages.map((message) => (
                         <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
                             {message.role === 'assistant' && (
@@ -179,8 +178,9 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
                             </div>
                         </div>
                     )}
+                    <div ref={messagesEndRef} />
                 </div>
-            </div>
+            </ScrollArea>
             <div className="flex-shrink-0 px-6 pb-6 pt-2 border-t">
                 <div className="p-1 bg-background border rounded-lg shadow-sm">
                   <form onSubmit={handleFormSubmit} className="flex w-full items-center">

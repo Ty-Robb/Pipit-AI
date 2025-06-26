@@ -9,6 +9,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { ChatPanel } from '@/components/chat-panel';
 import { StrategicOutputPanel } from '@/components/strategic-output-panel';
 import { workflows } from '@/data/workflows';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -120,7 +121,7 @@ export default function Home() {
                   </ResizablePanel>
                   <ResizableHandle withHandle />
                   <ResizablePanel defaultSize={50} minSize={30}>
-                      <div className="h-full overflow-y-auto">
+                      <ScrollArea className="h-full">
                         <div className="p-6">
                             <StrategicOutputPanel
                                 activePanel={activePanel}
@@ -131,7 +132,7 @@ export default function Home() {
                                 workflowOutputs={workflowOutputs}
                             />
                         </div>
-                      </div>
+                      </ScrollArea>
                   </ResizablePanel>
               </ResizablePanelGroup>
             )}
