@@ -13,12 +13,20 @@ interface StrategicOutputPanelProps {
   workflow: Workflow | null;
   strategicInsights: string | null;
   onStartConversation: (message: string) => void;
+  workflowOutputs?: Record<string, string>;
 }
 
-export function StrategicOutputPanel({ activePanel, setActivePanel, workflow, strategicInsights, onStartConversation }: StrategicOutputPanelProps) {
+export function StrategicOutputPanel({ 
+  activePanel, 
+  setActivePanel, 
+  workflow, 
+  strategicInsights, 
+  onStartConversation,
+  workflowOutputs = {}
+}: StrategicOutputPanelProps) {
     switch (activePanel) {
         case 'workflow':
-            return <WorkflowPanel workflow={workflow} />;
+            return <WorkflowPanel workflow={workflow} workflowOutputs={workflowOutputs} />;
         case 'website_assessment':
             return <WebsiteAssessmentPanel />;
         case 'document_insights':

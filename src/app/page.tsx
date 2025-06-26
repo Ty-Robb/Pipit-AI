@@ -15,11 +15,13 @@ export default function Home() {
   const [activeWorkflow, setActiveWorkflow] = useState<Workflow | null>(null);
   const [activePanel, setActivePanel] = useState<PanelView>('welcome');
   const [strategicInsights, setStrategicInsights] = useState<string | null>(null);
+  const [workflowOutputs, setWorkflowOutputs] = useState<Record<string, string>>({});
   
   const handleWorkflowSelect = (workflow: Workflow) => {
     setActiveWorkflow(workflow);
     setActivePanel('workflow');
     setMessages([]); // Clear chat when selecting a new workflow
+    setWorkflowOutputs({}); // Clear outputs for new workflow
   };
 
   const handlePanelChange = (panel: PanelView) => {
@@ -47,6 +49,13 @@ export default function Home() {
           content: messageContent,
       };
       setMessages([userMessage]);
+  };
+
+  const handleStepComplete = (step: string, output: string) => {
+    setWorkflowOutputs(prev => ({
+      ...prev,
+      [step]: output
+    }));
   };
 
   // Logic for dynamic breadcrumbs
@@ -94,13 +103,22 @@ export default function Home() {
                 <StrategicOutputPanel
                   activePanel={activePanel}
                   setActivePanel={handlePanelChange}
-                  workflow={activeWorkflow}
-                  strategicInsights={strategicInsights}
+                  workflow={null}
+                  strategicInsights={null}
                   onStartConversation={startConversation}
                 />
               </div>
             ) : (
               <ResizablePanelGroup direction="horizontal" className="h-full items-start">
+                  <ResizablePanel defaultSize={50} minSize={30}>
+                      <ChatPanel 
+                        messages={messages} 
+                        setMessages={setMessages}
+                        activeWorkflow={activeWorkflow}
+                        onStepComplete={handleStepComplete}
+                      />
+                  </ResizablePanel>
+                  <ResizableHandle withHandle />
                   <ResizablePanel defaultSize={50} minSize={30}>
                       <div className="h-full p-6 overflow-y-auto">
                           <StrategicOutputPanel
@@ -109,12 +127,9 @@ export default function Home() {
                               workflow={activeWorkflow}
                               strategicInsights={strategicInsights}
                               onStartConversation={startConversation}
+                              workflowOutputs={workflowOutputs}
                           />
                       </div>
-                  </ResizablePanel>
-                  <ResizableHandle withHandle />
-                  <ResizablePanel defaultSize={50} minSize={30}>
-                      <ChatPanel messages={messages} setMessages={setMessages} />
                   </ResizablePanel>
               </ResizablePanelGroup>
             )}

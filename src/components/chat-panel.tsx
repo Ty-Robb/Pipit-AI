@@ -1,22 +1,25 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import type { Message } from '@/lib/types';
+import type { Message, Workflow } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { aiConsultantGuidance } from '@/ai/flows/ai-consultant';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { User, Loader2, Send, Paperclip, Bot } from 'lucide-react';
+import { User, Loader2, Send, Paperclip } from 'lucide-react';
 import { AssistantIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
 
 interface ChatPanelProps {
     messages: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+    activeWorkflow: Workflow | null;
+    onStepComplete: (step: string, output: string) => void;
 }
 
-export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
+export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplete }: ChatPanelProps) {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
@@ -39,13 +42,28 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
 
         try {
             const context = [...messages.slice(-5), { role: 'user', content: messageContent, id: '' }].map(m => `${m.role}: ${m.content}`).join('\n');
-            const result = await aiConsultantGuidance({ message: messageContent, context });
+            const result = await aiConsultantGuidance({ 
+                message: messageContent, 
+                context,
+                workflow: activeWorkflow?.name
+            });
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
                 content: result.response,
             };
             setMessages((prev) => [...prev, assistantMessage]);
+
+            // Placeholder for agentic step completion.
+            // In a real scenario, the AI response would indicate if a step is complete.
+            // For now, we could simulate it.
+            // if (result.response.toLowerCase().includes("great, let's move to")) {
+            //   const completedStep = activeWorkflow?.steps.find(step => context.toLowerCase().includes(step.toLowerCase()));
+            //   if(completedStep) {
+            //      onStepComplete(completedStep, "This is a placeholder for the generated output of the completed step.");
+            //   }
+            // }
+
         } catch (error) {
             console.error('Error with AI Consultant:', error);
             toast({
@@ -94,6 +112,26 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
         };
         setMessages([...updatedMessages, userMessage]);
         await sendMessage(value);
+    }
+    
+    if (messages.length === 0) {
+        return (
+            <div className="flex h-full items-center justify-center p-6">
+                <Card className="w-full max-w-md text-center">
+                    <CardHeader>
+                        <div className="flex justify-center mb-4">
+                            <Avatar className="h-12 w-12">
+                                <AvatarFallback className="bg-primary/10 text-primary">
+                                    <AssistantIcon className="h-8 w-8" />
+                                </AvatarFallback>
+                            </Avatar>
+                        </div>
+                        <CardTitle className="font-headline text-2xl">Chat with Ethan</CardTitle>
+                        <CardDescription>Your AI strategy consultant. Select a workflow or tool to start the conversation.</CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
+        );
     }
 
     return (
