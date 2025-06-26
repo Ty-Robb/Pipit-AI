@@ -99,62 +99,45 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
     return (
         <div className="flex flex-col h-full p-6">
             <div className="flex-1 space-y-4 overflow-y-auto pb-4 pr-4 -mr-4">
-                {messages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                        <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mb-4">
-                            <Bot className="h-8 w-8 text-primary" />
-                        </div>
-                        <h3 className="text-xl font-semibold mb-1">Chat with Ethan</h3>
-                        <p className="text-muted-foreground text-sm">
-                            Your AI strategy consultant.
-                        </p>
-                        <p className="text-muted-foreground text-sm mt-2">
-                           Select a workflow or tool to start the conversation.
-                        </p>
-                    </div>
-                ) : (
-                    <>
-                        {messages.map((message) => (
-                            <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
-                                {message.role === 'assistant' && (
-                                    <Avatar className="h-8 w-8">
-                                        <AvatarFallback className="bg-primary/10 text-primary">
-                                            <AssistantIcon className="h-5 w-5" />
-                                        </AvatarFallback>
-                                    </Avatar>
-                                )}
-                                <div className={cn("rounded-lg px-3 py-2 max-w-[80%]", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
-                                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                                    {message.actions && (
-                                        <div className="mt-2 flex flex-wrap gap-2">
-                                            {message.actions.map((action, index) => (
-                                                <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
-                                                    {action.label}
-                                                </Button>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                                {message.role === 'user' && (
-                                    <Avatar className="h-8 w-8">
-                                        <AvatarFallback><User size={20} /></AvatarFallback>
-                                    </Avatar>
-                                )}
-                            </div>
-                        ))}
-                        {isLoading && messages.length > 0 && (
-                            <div className="flex items-start gap-3">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarFallback className="bg-primary/10 text-primary">
-                                        <AssistantIcon className="h-5 w-5" />
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div className="rounded-lg px-3 py-2 bg-secondary flex items-center">
-                                    <Loader2 className="h-5 w-5 animate-spin" />
-                                </div>
-                            </div>
+                {messages.map((message) => (
+                    <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
+                        {message.role === 'assistant' && (
+                            <Avatar className="h-8 w-8">
+                                <AvatarFallback className="bg-primary/10 text-primary">
+                                    <AssistantIcon className="h-5 w-5" />
+                                </AvatarFallback>
+                            </Avatar>
                         )}
-                    </>
+                        <div className={cn("rounded-lg px-3 py-2 max-w-[80%]", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
+                            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                            {message.actions && (
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {message.actions.map((action, index) => (
+                                        <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
+                                            {action.label}
+                                        </Button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        {message.role === 'user' && (
+                            <Avatar className="h-8 w-8">
+                                <AvatarFallback><User size={20} /></AvatarFallback>
+                            </Avatar>
+                        )}
+                    </div>
+                ))}
+                {isLoading && messages.length > 0 && (
+                    <div className="flex items-start gap-3">
+                        <Avatar className="h-8 w-8">
+                            <AvatarFallback className="bg-primary/10 text-primary">
+                                <AssistantIcon className="h-5 w-5" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="rounded-lg px-3 py-2 bg-secondary flex items-center">
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                        </div>
+                    </div>
                 )}
                 <div ref={messagesEndRef} />
             </div>
@@ -173,13 +156,13 @@ export function ChatPanel({ messages, setMessages }: ChatPanelProps) {
                                   handleFormSubmit(e);
                               }
                           }}
-                          disabled={isLoading}
+                          disabled={isLoading || messages.length === 0}
                       />
-                      <Button type="button" variant="ghost" size="icon" disabled={isLoading}>
+                      <Button type="button" variant="ghost" size="icon" disabled={isLoading || messages.length === 0}>
                           <Paperclip className="h-5 w-5 text-muted-foreground" />
                           <span className="sr-only">Attach file</span>
                       </Button>
-                      <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+                      <Button type="submit" size="icon" disabled={isLoading || !input.trim() || messages.length === 0}>
                           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                           <span className="sr-only">Send</span>
                       </Button>

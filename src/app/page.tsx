@@ -78,10 +78,6 @@ export default function Home() {
           <main className="flex-1 overflow-hidden">
              <ResizablePanelGroup direction="horizontal" className="h-full items-start">
                 <ResizablePanel defaultSize={50} minSize={30}>
-                    <ChatPanel messages={messages} setMessages={setMessages} />
-                </ResizablePanel>
-                <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={50} minSize={30}>
                     <div className="h-full p-6 overflow-y-auto">
                         <StrategicOutputPanel
                             activePanel={activePanel}
@@ -91,6 +87,10 @@ export default function Home() {
                             onStartConversation={startConversation}
                         />
                     </div>
+                </ResizablePanel>
+                <ResizableHandle withHandle />
+                <ResizablePanel defaultSize={50} minSize={30}>
+                    <ChatPanel messages={messages} setMessages={setMessages} />
                 </ResizablePanel>
             </ResizablePanelGroup>
           </main>
