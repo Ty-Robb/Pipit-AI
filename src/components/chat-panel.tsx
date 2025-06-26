@@ -11,6 +11,7 @@ import { User, Loader2, Send, Paperclip } from 'lucide-react';
 import { AssistantIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
+import { ScrollArea } from './ui/scroll-area';
 
 interface ChatPanelProps {
     messages: Message[];
@@ -31,8 +32,10 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
     };
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+        if (messagesEndRef.current) {
+            scrollToBottom();
+        }
+    }, [messages, isLoading]);
     
     const sendMessage = async (messageContent: string) => {
         if(isLoading) return;
@@ -135,50 +138,52 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex-1 space-y-4 overflow-y-auto p-6">
-                {messages.map((message) => (
-                    <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
-                        {message.role === 'assistant' && (
+            <ScrollArea className="flex-1">
+                <div className="space-y-4 p-6">
+                    {messages.map((message) => (
+                        <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
+                            {message.role === 'assistant' && (
+                                <Avatar className="h-8 w-8">
+                                    <AvatarFallback className="bg-primary/10 text-primary">
+                                        <AssistantIcon className="h-5 w-5" />
+                                    </AvatarFallback>
+                                </Avatar>
+                            )}
+                            <div className={cn("rounded-lg px-3 py-2 max-w-[80%]", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
+                                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                {message.actions && (
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                        {message.actions.map((action, index) => (
+                                            <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
+                                                {action.label}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            {message.role === 'user' && (
+                                <Avatar className="h-8 w-8">
+                                    <AvatarFallback><User size={20} /></AvatarFallback>
+                                </Avatar>
+                            )}
+                        </div>
+                    ))}
+                    {isLoading && messages.length > 0 && (
+                        <div className="flex items-start gap-3">
                             <Avatar className="h-8 w-8">
                                 <AvatarFallback className="bg-primary/10 text-primary">
                                     <AssistantIcon className="h-5 w-5" />
                                 </AvatarFallback>
                             </Avatar>
-                        )}
-                        <div className={cn("rounded-lg px-3 py-2 max-w-[80%]", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
-                            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                            {message.actions && (
-                                <div className="mt-2 flex flex-wrap gap-2">
-                                    {message.actions.map((action, index) => (
-                                        <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
-                                            {action.label}
-                                        </Button>
-                                    ))}
-                                </div>
-                            )}
+                            <div className="rounded-lg px-3 py-2 bg-secondary flex items-center">
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                            </div>
                         </div>
-                        {message.role === 'user' && (
-                            <Avatar className="h-8 w-8">
-                                <AvatarFallback><User size={20} /></AvatarFallback>
-                            </Avatar>
-                        )}
-                    </div>
-                ))}
-                {isLoading && messages.length > 0 && (
-                    <div className="flex items-start gap-3">
-                        <Avatar className="h-8 w-8">
-                            <AvatarFallback className="bg-primary/10 text-primary">
-                                <AssistantIcon className="h-5 w-5" />
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="rounded-lg px-3 py-2 bg-secondary flex items-center">
-                            <Loader2 className="h-5 w-5 animate-spin" />
-                        </div>
-                    </div>
-                )}
-                <div ref={messagesEndRef} />
-            </div>
-            <div className="px-6 pb-6 pt-2">
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
+            </ScrollArea>
+            <div className="px-6 pb-6 pt-2 border-t">
                 <div className="p-1 bg-background border rounded-lg shadow-sm">
                   <form onSubmit={handleFormSubmit} className="flex w-full items-center">
                       <Textarea
