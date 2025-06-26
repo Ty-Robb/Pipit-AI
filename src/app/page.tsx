@@ -110,7 +110,7 @@ export default function Home() {
                 />
               </div>
             ) : (
-              <ResizablePanelGroup direction="horizontal" className="h-full items-start">
+              <ResizablePanelGroup direction="horizontal" className="h-full">
                   <ResizablePanel defaultSize={50} minSize={30}>
                       <ChatPanel 
                         messages={messages} 

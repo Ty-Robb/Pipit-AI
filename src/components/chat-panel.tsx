@@ -136,7 +136,7 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
 
     return (
         <div className="flex flex-col h-full">
-            <ScrollArea className="flex-1">
+            <ScrollArea className="flex-1 overflow-y-auto">
                 <div className="p-6 space-y-4">
                     {messages.map((message) => (
                         <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
