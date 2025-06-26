@@ -9,10 +9,12 @@ export function AppLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col">
         <PageHeader />
-        <DashboardContent />
-      </main>
+        <main className="flex-1 bg-muted/40 p-4 lg:p-6">
+          <DashboardContent />
+        </main>
+      </div>
     </SidebarProvider>
   );
 }
