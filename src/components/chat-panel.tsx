@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -9,7 +10,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { User, Loader2, Send, Paperclip } from 'lucide-react';
 import { AssistantIcon } from '@/components/icons';
-import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
 
@@ -24,11 +24,16 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
     const isSendingInitialMessage = useRef(false);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView();
+        if (scrollAreaRef.current) {
+            const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+            if (viewport) {
+                viewport.scrollTop = viewport.scrollHeight;
+            }
+        }
     };
 
     useEffect(() => {
@@ -136,49 +141,51 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
 
     return (
         <div className="flex flex-col h-full">
-            <ScrollArea className="flex-1 overflow-y-auto">
-                <div className="p-6 space-y-4">
+            <ScrollArea className="flex-1" ref={scrollAreaRef}>
+                <div className="p-6 space-y-6">
                     {messages.map((message) => (
-                        <div key={message.id} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
-                            {message.role === 'assistant' && (
-                                <Avatar className="h-8 w-8">
-                                    <AvatarFallback className="bg-primary/10 text-primary">
-                                        <AssistantIcon className="h-5 w-5" />
-                                    </AvatarFallback>
-                                </Avatar>
-                            )}
-                            <div className={cn("rounded-lg px-3 py-2 max-w-[80%]", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
-                                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                                {message.actions && (
-                                    <div className="mt-2 flex flex-wrap gap-2">
-                                        {message.actions.map((action, index) => (
-                                            <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
-                                                {action.label}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            {message.role === 'user' && (
-                                <Avatar className="h-8 w-8">
-                                    <AvatarFallback><User size={20} /></AvatarFallback>
-                                </Avatar>
-                            )}
-                        </div>
+                       <div key={message.id} className="flex items-start gap-4">
+                           <Avatar className="h-8 w-8 flex-shrink-0 border">
+                               {message.role === 'user' ? (
+                                   <AvatarFallback>
+                                       <User size={18} />
+                                   </AvatarFallback>
+                               ) : (
+                                   <AvatarFallback className="bg-primary/10 text-primary">
+                                       <AssistantIcon className="h-5 w-5" />
+                                   </AvatarFallback>
+                               )}
+                           </Avatar>
+                           <div className="flex-1 space-y-1">
+                               <p className="font-semibold text-sm">
+                                   {message.role === 'user' ? 'You' : 'Ethan'}
+                               </p>
+                               <p className="text-sm whitespace-pre-wrap text-muted-foreground">{message.content}</p>
+                               {message.actions && (
+                                   <div className="mt-2 flex flex-wrap gap-2">
+                                       {message.actions.map((action, index) => (
+                                           <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
+                                               {action.label}
+                                           </Button>
+                                       ))}
+                                   </div>
+                               )}
+                           </div>
+                       </div>
                     ))}
                     {isLoading && messages.length > 0 && (
-                        <div className="flex items-start gap-3">
-                            <Avatar className="h-8 w-8">
+                        <div className="flex items-start gap-4">
+                            <Avatar className="h-8 w-8 flex-shrink-0 border">
                                 <AvatarFallback className="bg-primary/10 text-primary">
                                     <AssistantIcon className="h-5 w-5" />
                                 </AvatarFallback>
                             </Avatar>
-                            <div className="rounded-lg px-3 py-2 bg-secondary flex items-center">
-                                <Loader2 className="h-5 w-5 animate-spin" />
+                            <div className="flex-1 space-y-1">
+                                <p className="font-semibold text-sm">Ethan</p>
+                                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                             </div>
                         </div>
                     )}
-                    <div ref={messagesEndRef} />
                 </div>
             </ScrollArea>
             <div className="flex-shrink-0 px-6 pb-6 pt-2 border-t">
