@@ -7,11 +7,9 @@ import { useToast } from '@/hooks/use-toast';
 import { aiConsultantGuidance } from '@/ai/flows/ai-consultant';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { User, Loader2, Send, Paperclip } from 'lucide-react';
-import { AssistantIcon } from '@/components/icons';
-import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
+import { Loader2, Send, Paperclip } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 interface ChatPanelProps {
     messages: Message[];
@@ -118,71 +116,36 @@ export function ChatPanel({ messages, setMessages, activeWorkflow, onStepComplet
         await sendMessage(value);
     }
     
-    if (messages.length === 0) {
-        return (
-            <div className="flex h-full items-center justify-center p-6">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader>
-                        <div className="flex justify-center mb-4">
-                            <Avatar className="h-12 w-12">
-                                <AvatarFallback className="bg-primary/10 text-primary">
-                                    <AssistantIcon className="h-8 w-8" />
-                                </AvatarFallback>
-                            </Avatar>
-                        </div>
-                        <CardTitle className="font-headline text-2xl">Chat with Ethan</CardTitle>
-                        <CardDescription>Your AI strategy consultant. Select a workflow or tool to start the conversation.</CardDescription>
-                    </CardHeader>
-                </Card>
-            </div>
-        );
-    }
-
     return (
         <div className="flex flex-col h-full">
             <ScrollArea className="flex-1" ref={scrollAreaRef}>
                 <div className="p-6 space-y-6">
                     {messages.map((message) => (
-                       <div key={message.id} className="flex items-start gap-4">
-                           <Avatar className="h-8 w-8 flex-shrink-0 border">
-                               {message.role === 'user' ? (
-                                   <AvatarFallback>
-                                       <User size={18} />
-                                   </AvatarFallback>
-                               ) : (
-                                   <AvatarFallback className="bg-primary/10 text-primary">
-                                       <AssistantIcon className="h-5 w-5" />
-                                   </AvatarFallback>
-                               )}
-                           </Avatar>
-                           <div className="flex-1 space-y-1">
-                               <p className="font-semibold text-sm">
-                                   {message.role === 'user' ? 'You' : 'Ethan'}
-                               </p>
-                               <p className="text-sm whitespace-pre-wrap text-muted-foreground">{message.content}</p>
-                               {message.actions && (
-                                   <div className="mt-2 flex flex-wrap gap-2">
-                                       {message.actions.map((action, index) => (
-                                           <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
-                                               {action.label}
-                                           </Button>
-                                       ))}
-                                   </div>
-                               )}
-                           </div>
+                       <div key={message.id} className="space-y-1">
+                           <p className="font-semibold text-sm">
+                               {message.role === 'user' ? 'You' : 'Ethan'}
+                           </p>
+                           <p className={cn(
+                                "text-sm whitespace-pre-wrap",
+                                message.role === 'user' ? 'text-muted-foreground' : 'text-foreground/90'
+                            )}>
+                                {message.content}
+                            </p>
+                           {message.actions && (
+                               <div className="mt-2 flex flex-wrap gap-2">
+                                   {message.actions.map((action, index) => (
+                                       <Button key={index} variant="outline" size="sm" onClick={() => handleActionClick(action.value)} disabled={isLoading}>
+                                           {action.label}
+                                       </Button>
+                                   ))}
+                               </div>
+                           )}
                        </div>
                     ))}
                     {isLoading && messages.length > 0 && (
-                        <div className="flex items-start gap-4">
-                            <Avatar className="h-8 w-8 flex-shrink-0 border">
-                                <AvatarFallback className="bg-primary/10 text-primary">
-                                    <AssistantIcon className="h-5 w-5" />
-                                </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1 space-y-1">
-                                <p className="font-semibold text-sm">Ethan</p>
-                                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-                            </div>
+                        <div className="space-y-1">
+                            <p className="font-semibold text-sm">Ethan</p>
+                            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                         </div>
                     )}
                 </div>
