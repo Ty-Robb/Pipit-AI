@@ -152,7 +152,18 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  onWorkflowSelect?: unknown
+  activeWorkflow?: unknown
+  onPanelChange?: unknown
+}
+
+export function AppSidebar({
+  onWorkflowSelect,
+  activeWorkflow,
+  onPanelChange,
+  ...props
+}: AppSidebarProps) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
