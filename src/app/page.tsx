@@ -137,7 +137,11 @@ export default function Home() {
 
   return (
     <>
-      <AppSidebar onWorkflowSelect={handleWorkflowSelect} activeWorkflow={activeWorkflow} />
+      <AppSidebar 
+        onWorkflowSelect={handleWorkflowSelect} 
+        activeWorkflow={activeWorkflow}
+        onPanelChange={handlePanelChange}
+      />
       <SidebarInset>
         <div className="flex flex-col h-full bg-background text-foreground md:rounded-xl overflow-hidden">
           <PageHeader parent={parent} pageTitle={pageTitle} />

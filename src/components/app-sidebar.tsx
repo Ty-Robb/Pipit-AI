@@ -1,184 +1,61 @@
 "use client"
 
 import * as React from "react"
-import {
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+import { FileText, BookText, Lightbulb } from "lucide-react"
+import { Sidebar, SidebarContent, SidebarHeader, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
+import { MainNav } from "@/components/main-nav"
+import { UserNav } from "@/components/user-nav"
+import type { Workflow, PanelView } from "@/lib/types";
+import { Button } from "./ui/button"
+import { Separator } from "./ui/separator"
+import { PipitLogo } from "./icons"
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
-
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+interface AppSidebarProps extends Omit<React.ComponentProps<typeof Sidebar>, 'children'> {
+  onWorkflowSelect: (workflow: Workflow) => void;
+  activeWorkflow: Workflow | null;
+  onPanelChange: (panel: PanelView) => void;
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+export function AppSidebar({ onWorkflowSelect, activeWorkflow, onPanelChange, ...props }: AppSidebarProps) {
   return (
-    <Sidebar variant="inset" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+    <Sidebar {...props}>
+      <SidebarHeader className="border-b h-16">
+         <a href="/" className="flex h-full items-center gap-2 font-semibold px-4">
+          <PipitLogo className="h-8 w-8 text-primary" />
+          <span className="text-lg">Pipit AI</span>
+        </a>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+      <SidebarContent className="p-0 flex flex-col">
+        <MainNav 
+          onWorkflowSelect={onWorkflowSelect}
+          activeWorkflow={activeWorkflow}
+          className="pt-4"
+        />
+
+        <div className="mt-auto px-4 pb-4 space-y-1">
+            <Separator className="my-2"/>
+            <h3 className="px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">
+                Tools
+            </h3>
+            <Button variant="ghost" className="w-full justify-start" onClick={() => onPanelChange('website_assessment')}>
+                <BookText className="mr-2 h-4 w-4" />
+                Website Assessment
+            </Button>
+            <Button variant="ghost" className="w-full justify-start" onClick={() => onPanelChange('document_insights')}>
+                <FileText className="mr-2 h-4 w-4" />
+                Document Insights
+            </Button>
+            <Button variant="ghost" className="w-full justify-start" onClick={() => onPanelChange('content_generation')}>
+                <Lightbulb className="mr-2 h-4 w-4" />
+                Content Generation
+            </Button>
+        </div>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
+      <SidebarFooter className="border-t">
+        <div className="p-2">
+            <UserNav />
+        </div>
       </SidebarFooter>
     </Sidebar>
   )
