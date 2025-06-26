@@ -10,6 +10,8 @@ import { ChatPanel } from '@/components/chat-panel';
 import { StrategicOutputPanel } from '@/components/strategic-output-panel';
 import { workflows } from '@/data/workflows';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -18,6 +20,15 @@ export default function DashboardPage() {
   const [strategicInsights, setStrategicInsights] = useState<string | null>(null);
   const [workflowOutputs, setWorkflowOutputs] = useState<Record<string, string>>({});
   
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user === null) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
   const handleWorkflowSelect = (workflow: Workflow) => {
     setActiveWorkflow(workflow);
     setActivePanel('workflow');
@@ -58,6 +69,14 @@ export default function DashboardPage() {
       [step]: output
       }));
   };
+
+  if (loading || !user) {
+    return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+    );
+  }
 
   // Logic for dynamic breadcrumbs
   let pageTitle = "Dashboard";
@@ -110,7 +129,7 @@ export default function DashboardPage() {
                 />
               </div>
             ) : (
-              <ResizablePanelGroup direction="horizontal" className="h-full">
+              <ResizablePanelGroup direction="horizontal" className="h-full items-stretch">
                   <ResizablePanel defaultSize={50} minSize={30}>
                       <ChatPanel 
                         messages={messages} 
