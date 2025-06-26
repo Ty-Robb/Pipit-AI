@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Search, Briefcase } from 'lucide-react';
 import type { PanelView } from '@/lib/types';
 import { PipitLogo } from '@/components/icons';
+import { cn } from '@/lib/utils';
 
 interface WelcomePanelProps {
   setActivePanel: (panel: PanelView) => void;
@@ -17,14 +18,16 @@ const actionCards = [
         description: 'Begin with foundational workflows to understand your market and brand position.',
         icon: Search,
         action: "I'd like to start with a Discovery workflow.",
-        cta: 'Start Discovery'
+        cta: 'Start Discovery',
+        isFeatured: false,
     },
     {
         title: 'Marketing Strategy',
         description: 'Build a comprehensive go-to-market plan with our guided strategy workflows.',
         icon: Briefcase,
         action: "I'd like to develop a full Marketing Strategy.",
-        cta: 'Start Strategy'
+        cta: 'Start Strategy',
+        isFeatured: true,
     },
 ];
 
@@ -43,9 +46,12 @@ export function WelcomePanel({ setActivePanel, onStartConversation }: WelcomePan
                 How would you like to begin? Choose an option below to start a conversation with Ethan, or select a specific workflow from the sidebar.
             </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto w-full">
             {actionCards.map((card, index) => (
-                <Card key={index} className="flex flex-col hover:border-primary/50 hover:shadow-lg transition-all duration-200">
+                <Card key={index} className={cn(
+                    "flex flex-col text-left hover:shadow-lg transition-all duration-200",
+                    card.isFeatured ? "border-primary hover:border-primary/80" : "hover:border-border"
+                )}>
                     <CardHeader>
                         <div className="flex items-center gap-3 mb-2">
                             <div className="p-3 bg-primary/10 rounded-lg text-primary">
@@ -58,7 +64,14 @@ export function WelcomePanel({ setActivePanel, onStartConversation }: WelcomePan
                         <CardDescription>{card.description}</CardDescription>
                     </CardContent>
                     <CardFooter>
-                        <Button variant="ghost" className="w-full justify-start text-primary hover:text-primary" onClick={() => onStartConversation(card.action)}>
+                        <Button 
+                            variant={card.isFeatured ? "default" : "ghost"} 
+                            className={cn(
+                                "w-full justify-start",
+                                !card.isFeatured && "text-primary hover:text-primary"
+                            )} 
+                            onClick={() => onStartConversation(card.action)}
+                        >
                             {card.cta}
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>

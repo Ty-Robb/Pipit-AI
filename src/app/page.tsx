@@ -8,6 +8,7 @@ import { PageHeader } from '@/components/page-header';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { ChatPanel } from '@/components/chat-panel';
 import { StrategicOutputPanel } from '@/components/strategic-output-panel';
+import { workflows } from '@/data/workflows';
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -28,6 +29,18 @@ export default function Home() {
   };
   
   const startConversation = (messageContent: string) => {
+      // When starting a conversation from welcome, let's pick a default workflow.
+      // The AI can then guide the user to the correct one.
+      if (messageContent.toLowerCase().includes('discovery')) {
+        const discoveryWorkflow = workflows.find(wf => wf.category === 'Discovery');
+        if(discoveryWorkflow) setActiveWorkflow(discoveryWorkflow);
+      } else if (messageContent.toLowerCase().includes('marketing strategy')) {
+        const strategyWorkflow = workflows.find(wf => wf.category === 'Go-to-Market');
+        if(strategyWorkflow) setActiveWorkflow(strategyWorkflow);
+      }
+
+      setActivePanel('workflow');
+      
       const userMessage: Message = {
           id: Date.now().toString(),
           role: 'user',
@@ -76,23 +89,35 @@ export default function Home() {
         <div className="flex flex-col h-full bg-background text-foreground md:rounded-xl overflow-hidden">
           <PageHeader parent={parent} pageTitle={pageTitle} />
           <main className="flex-1 overflow-hidden">
-             <ResizablePanelGroup direction="horizontal" className="h-full items-start">
-                <ResizablePanel defaultSize={50} minSize={30}>
-                    <div className="h-full p-6 overflow-y-auto">
-                        <StrategicOutputPanel
-                            activePanel={activePanel}
-                            setActivePanel={handlePanelChange}
-                            workflow={activeWorkflow}
-                            strategicInsights={strategicInsights}
-                            onStartConversation={startConversation}
-                        />
-                    </div>
-                </ResizablePanel>
-                <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={50} minSize={30}>
-                    <ChatPanel messages={messages} setMessages={setMessages} />
-                </ResizablePanel>
-            </ResizablePanelGroup>
+            {activePanel === 'welcome' ? (
+              <div className="h-full p-6 overflow-y-auto">
+                <StrategicOutputPanel
+                  activePanel={activePanel}
+                  setActivePanel={handlePanelChange}
+                  workflow={activeWorkflow}
+                  strategicInsights={strategicInsights}
+                  onStartConversation={startConversation}
+                />
+              </div>
+            ) : (
+              <ResizablePanelGroup direction="horizontal" className="h-full items-start">
+                  <ResizablePanel defaultSize={50} minSize={30}>
+                      <div className="h-full p-6 overflow-y-auto">
+                          <StrategicOutputPanel
+                              activePanel={activePanel}
+                              setActivePanel={handlePanelChange}
+                              workflow={activeWorkflow}
+                              strategicInsights={strategicInsights}
+                              onStartConversation={startConversation}
+                          />
+                      </div>
+                  </ResizablePanel>
+                  <ResizableHandle withHandle />
+                  <ResizablePanel defaultSize={50} minSize={30}>
+                      <ChatPanel messages={messages} setMessages={setMessages} />
+                  </ResizablePanel>
+              </ResizablePanelGroup>
+            )}
           </main>
         </div>
       </SidebarInset>
