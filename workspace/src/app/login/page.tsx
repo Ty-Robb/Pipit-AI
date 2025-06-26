@@ -30,11 +30,10 @@ export default function LoginPage() {
       <div className="relative hidden bg-muted lg:block">
         <Image
           src="https://placehold.co/1200x1800.png"
-          alt="Pipit AI background image"
-          data-ai-hint="abstract birds"
-          layout="fill"
-          objectFit="cover"
-          className="dark:brightness-[0.2] dark:grayscale"
+          alt="Abstract pattern representing AI connections"
+          data-ai-hint="abstract pattern"
+          fill
+          className="object-cover dark:brightness-[0.2] dark:grayscale"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute bottom-10 left-10 text-white max-w-md">

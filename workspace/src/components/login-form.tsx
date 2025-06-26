@@ -74,15 +74,7 @@ export function LoginForm({ className, onSignupClick, ...props }: LoginFormProps
           />
         </div>
         <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password-login">Password</Label>
-            <a
-              href="#"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
-            >
-              Forgot your password?
-            </a>
-          </div>
+          <Label htmlFor="password-login">Password</Label>
           <Input 
             id="password-login" 
             type="password" 
