@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import type { Message, Workflow } from '@/lib/types';
+import type { Message, Workflow, PanelView } from '@/lib/types';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset } from '@/components/ui/sidebar';
 import { PageHeader } from '@/components/page-header';
@@ -23,9 +23,12 @@ const initialMessages: Message[] = [
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [activeWorkflow, setActiveWorkflow] = useState<Workflow | null>(null);
+  const [activePanel, setActivePanel] = useState<PanelView>('welcome');
+  const [strategicInsights, setStrategicInsights] = useState<string | null>(null);
 
   const handleWorkflowSelect = (workflow: Workflow) => {
     setActiveWorkflow(workflow);
+    setActivePanel('workflow');
     setMessages([
       {
         id: 'init',
@@ -35,6 +38,14 @@ export default function Home() {
     ]);
   };
 
+  const handlePanelChange = (panel: PanelView) => {
+    setActiveWorkflow(null);
+    setActivePanel(panel);
+    // Optionally, reset chat or add a new message when a tool is selected
+    setMessages(initialMessages); 
+  };
+
+
   return (
     <>
       <AppSidebar onWorkflowSelect={handleWorkflowSelect} activeWorkflow={activeWorkflow} />
@@ -43,7 +54,12 @@ export default function Home() {
           <PageHeader />
           <main className="flex-1 grid md:grid-cols-2 gap-8 p-6 md:p-8 overflow-hidden">
               <ChatPanel messages={messages} setMessages={setMessages} />
-              <StrategicOutputPanel workflow={activeWorkflow} />
+              <StrategicOutputPanel
+                activePanel={activePanel}
+                setActivePanel={handlePanelChange}
+                workflow={activeWorkflow}
+                strategicInsights={strategicInsights}
+              />
           </main>
         </div>
       </SidebarInset>
