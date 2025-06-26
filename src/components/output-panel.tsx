@@ -1,34 +1,32 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { StrategicOutputPlaceholder } from '@/components/strategic-output-placeholder';
-import { FileText, User, Download } from 'lucide-react';
+import type { Workflow, PanelView } from '@/lib/types';
 
-export function OutputPanel() {
-    return (
-        <Card className="h-full">
-            <CardHeader className="border-b">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="sm" className="font-semibold">
-                            <FileText className="mr-2" />
-                            SWOT
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-muted-foreground">
-                            <User className="mr-2" />
-                            Persona
-                        </Button>
-                    </div>
-                    <Button variant="outline" size="sm">
-                        <Download className="mr-2" />
-                        Export
-                    </Button>
-                </div>
-            </CardHeader>
-            <CardContent className="h-[calc(100%-4.5rem)]">
-                <StrategicOutputPlaceholder />
-            </CardContent>
-        </Card>
-    )
+import { WelcomePanel } from '@/components/panels/welcome-panel';
+import { WorkflowPanel } from '@/components/panels/workflow-panel';
+import { WebsiteAssessmentPanel } from '@/components/panels/website-assessment-panel';
+import { DocumentInsightsPanel } from '@/components/panels/document-insights-panel';
+import { ContentGenerationPanel } from '@/components/panels/content-generation-panel';
+
+interface OutputPanelProps {
+    activePanel: PanelView;
+    workflow: Workflow | null;
+    strategicInsights: string | null;
+}
+
+export function OutputPanel({ activePanel, workflow, strategicInsights }: OutputPanelProps) {
+    switch (activePanel) {
+        case 'welcome':
+            return <WelcomePanel />;
+        case 'workflow':
+            return <WorkflowPanel workflow={workflow} />;
+        case 'website_assessment':
+            return <WebsiteAssessmentPanel />;
+        case 'document_insights':
+            return <DocumentInsightsPanel />;
+        case 'content_generation':
+            return <ContentGenerationPanel strategicInsights={strategicInsights} />;
+        default:
+            return <WelcomePanel />;
+    }
 }

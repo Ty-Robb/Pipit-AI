@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -9,9 +8,6 @@ import {
     SidebarMenu,
     SidebarMenuItem,
     SidebarMenuButton,
-    SidebarMenuSub,
-    SidebarMenuSubButton,
-    SidebarMenuSubItem,
     SidebarSeparator
 } from "@/components/ui/sidebar";
 import {
@@ -24,17 +20,18 @@ import {
     ChevronDown,
     LifeBuoy,
     MessageSquare,
-    MoreHorizontal,
-    Plus,
-    Hash,
-    Briefcase,
-    Plane,
 } from "lucide-react";
 import { PipitLogo } from "@/components/icons";
 import { UserNav } from "@/components/user-nav";
-import { Button } from "./ui/button";
+import { MainNav } from "./main-nav";
+import type { Workflow } from "@/lib/types";
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  activeWorkflow: Workflow | null;
+  onWorkflowSelect: (workflow: Workflow) => void;
+}
+
+export function AppSidebar({ activeWorkflow, onWorkflowSelect }: AppSidebarProps) {
     return (
         <Sidebar variant="sidebar" collapsible="offcanvas">
             <SidebarHeader className="p-4">
@@ -96,33 +93,10 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
 
-                <SidebarMenu className="mt-4">
-                     <SidebarGroupLabel>Projects</SidebarGroupLabel>
-                     <SidebarMenuItem>
-                        <SidebarMenuButton>
-                            <Hash />
-                            Design Engineering
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton>
-                            <Briefcase />
-                            Sales & Marketing
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton>
-                            <Plane />
-                            Travel
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                         <SidebarMenuButton>
-                            <MoreHorizontal />
-                            More
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+                <div className="mt-4">
+                     <SidebarGroupLabel>Workflows</SidebarGroupLabel>
+                     <MainNav activeWorkflow={activeWorkflow} onWorkflowSelect={onWorkflowSelect} className="-mx-2" />
+                </div>
             </SidebarContent>
             <SidebarFooter className="p-4">
                 <SidebarMenu>
