@@ -2,39 +2,33 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, FileText, Globe, Sparkles } from 'lucide-react';
+import { ArrowRight, Search, Briefcase } from 'lucide-react';
 import type { PanelView } from '@/lib/types';
 import { PipitLogo } from '@/components/icons';
 
 interface WelcomePanelProps {
   setActivePanel: (panel: PanelView) => void;
+  onStartConversation: (message: string) => void;
 }
 
 const actionCards = [
     {
-        title: 'Website Assessment',
-        description: 'Analyze a URL for strategic insights.',
-        icon: Globe,
-        panel: 'website_assessment' as PanelView,
-        cta: 'Assess Website'
+        title: 'Discovery',
+        description: 'Begin with foundational workflows to understand your market and brand position.',
+        icon: Search,
+        action: "I'd like to start with a Discovery workflow.",
+        cta: 'Start Discovery'
     },
     {
-        title: 'Document Insights',
-        description: 'Extract key information from a PDF.',
-        icon: FileText,
-        panel: 'document_insights' as PanelView,
-        cta: 'Analyze Document'
-    },
-    {
-        title: 'Content Generation',
-        description: 'Brainstorm marketing ideas from insights.',
-        icon: Sparkles,
-        panel: 'content_generation' as PanelView,
-        cta: 'Generate Content'
+        title: 'Marketing Strategy',
+        description: 'Build a comprehensive go-to-market plan with our guided strategy workflows.',
+        icon: Briefcase,
+        action: "I'd like to develop a full Marketing Strategy.",
+        cta: 'Start Strategy'
     },
 ];
 
-export function WelcomePanel({ setActivePanel }: WelcomePanelProps) {
+export function WelcomePanel({ setActivePanel, onStartConversation }: WelcomePanelProps) {
   return (
     <div className="h-full flex flex-col justify-center">
         <div className="text-center mb-10">
@@ -46,12 +40,12 @@ export function WelcomePanel({ setActivePanel }: WelcomePanelProps) {
                 </div>
             </div>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-                Select a standalone tool below to get started immediately, or choose a guided workflow from the sidebar to develop a comprehensive strategy.
+                How would you like to begin? Choose an option below to start a conversation with Ethan, or select a specific workflow from the sidebar.
             </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {actionCards.map((card) => (
-                <Card key={card.panel} className="flex flex-col hover:border-primary/50 hover:shadow-lg transition-all duration-200">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {actionCards.map((card, index) => (
+                <Card key={index} className="flex flex-col hover:border-primary/50 hover:shadow-lg transition-all duration-200">
                     <CardHeader>
                         <div className="flex items-center gap-3 mb-2">
                             <div className="p-3 bg-primary/10 rounded-lg text-primary">
@@ -64,7 +58,7 @@ export function WelcomePanel({ setActivePanel }: WelcomePanelProps) {
                         <CardDescription>{card.description}</CardDescription>
                     </CardContent>
                     <CardFooter>
-                        <Button variant="ghost" className="w-full justify-start text-primary hover:text-primary" onClick={() => setActivePanel(card.panel)}>
+                        <Button variant="ghost" className="w-full justify-start text-primary hover:text-primary" onClick={() => onStartConversation(card.action)}>
                             {card.cta}
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>

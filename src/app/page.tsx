@@ -91,6 +91,19 @@ export default function Home() {
       await sendMessage(value);
   }
 
+  const startConversation = async (messageContent: string) => {
+      if (isLoading) return;
+
+      const userMessage: Message = {
+          id: Date.now().toString(),
+          role: 'user',
+          content: messageContent,
+      };
+
+      setMessages([userMessage]);
+      await sendMessage(messageContent);
+  };
+
   const showChat = messages.length > 0;
 
   return (
@@ -109,6 +122,7 @@ export default function Home() {
                         setActivePanel={handlePanelChange}
                         workflow={activeWorkflow}
                         strategicInsights={strategicInsights}
+                        onStartConversation={startConversation}
                     />
                  )}
               </div>

@@ -12,9 +12,10 @@ interface StrategicOutputPanelProps {
   setActivePanel: (panel: PanelView) => void;
   workflow: Workflow | null;
   strategicInsights: string | null;
+  onStartConversation: (message: string) => void;
 }
 
-export function StrategicOutputPanel({ activePanel, setActivePanel, workflow, strategicInsights }: StrategicOutputPanelProps) {
+export function StrategicOutputPanel({ activePanel, setActivePanel, workflow, strategicInsights, onStartConversation }: StrategicOutputPanelProps) {
     switch (activePanel) {
         case 'workflow':
             return <WorkflowPanel workflow={workflow} />;
@@ -26,6 +27,6 @@ export function StrategicOutputPanel({ activePanel, setActivePanel, workflow, st
             return <ContentGenerationPanel strategicInsights={strategicInsights} />;
         case 'welcome':
         default:
-            return <WelcomePanel setActivePanel={setActivePanel} />;
+            return <WelcomePanel setActivePanel={setActivePanel} onStartConversation={onStartConversation} />;
     }
 }
