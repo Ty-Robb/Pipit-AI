@@ -1,10 +1,9 @@
 "use client";
 
-import { useContext, useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Message, Workflow, PanelView } from '@/lib/types';
 import { AppSidebar } from '@/components/app-sidebar';
-import { SidebarInset } from '@/components/ui/sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { PageHeader } from '@/components/page-header';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { ChatPanel } from '@/components/chat-panel';
@@ -108,14 +107,14 @@ export default function Home() {
   }
 
   return (
-    <>
+    <SidebarProvider>
       <AppSidebar 
         onWorkflowSelect={handleWorkflowSelect} 
         activeWorkflow={activeWorkflow}
         onPanelChange={handlePanelChange}
       />
       <SidebarInset>
-        <div className="flex flex-col h-full bg-background text-foreground md:rounded-xl overflow-hidden">
+        <div className="flex flex-col h-screen bg-background text-foreground md:rounded-xl overflow-hidden">
           <PageHeader parent={parent} pageTitle={pageTitle} />
           <main className="flex-1 overflow-hidden">
             {activePanel === 'welcome' ? (
@@ -129,7 +128,7 @@ export default function Home() {
                 />
               </div>
             ) : (
-              <ResizablePanelGroup direction="horizontal" className="h-full">
+              <ResizablePanelGroup direction="horizontal" className="h-full items-stretch">
                   <ResizablePanel defaultSize={50} minSize={30}>
                       <ChatPanel 
                         messages={messages} 
@@ -158,6 +157,6 @@ export default function Home() {
           </main>
         </div>
       </SidebarInset>
-    </>
+    </SidebarProvider>
   );
 }
