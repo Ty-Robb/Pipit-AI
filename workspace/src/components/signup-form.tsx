@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 interface SignupFormProps {
@@ -49,8 +48,7 @@ export function SignupForm({ onLoginClick }: SignupFormProps) {
         title: "Signup Failed",
         description: "Could not create account. Please try again.",
       });
-    } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 

@@ -9,11 +9,11 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
-interface LoginFormProps extends React.ComponentPropsWithoutRef<"form"> {
+interface LoginFormProps {
     onSignupClick: () => void;
 }
 
-export function LoginForm({ className, onSignupClick, ...props }: LoginFormProps) {
+export function LoginForm({ className, onSignupClick, ...props }: LoginFormProps & React.ComponentPropsWithoutRef<"form">) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,6 @@ export function LoginForm({ className, onSignupClick, ...props }: LoginFormProps
         title: "Login Failed",
         description: "Please check your credentials and try again.",
       });
-    } finally {
       setIsLoading(false);
     }
   };
@@ -48,7 +47,6 @@ export function LoginForm({ className, onSignupClick, ...props }: LoginFormProps
             title: "Sign-in Failed",
             description: "Could not sign in with Google. Please try again.",
         });
-    } finally {
         setIsLoading(false);
     }
   };
@@ -75,15 +73,15 @@ export function LoginForm({ className, onSignupClick, ...props }: LoginFormProps
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="password-login">Password</Label>
-          <Input 
-            id="password-login" 
-            type="password" 
-            required 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={isLoading}
-          />
+            <Label htmlFor="password-login">Password</Label>
+            <Input 
+                id="password-login" 
+                type="password" 
+                required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+            />
         </div>
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? <Loader2 className="animate-spin" /> : 'Login'}
