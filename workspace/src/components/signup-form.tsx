@@ -28,8 +28,6 @@ export function SignupForm({ onLoginClick }: SignupFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { signupWithEmail } = useAuth();
   const { toast } = useToast();
-  const router = useRouter();
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,7 +42,7 @@ export function SignupForm({ onLoginClick }: SignupFormProps) {
     setIsLoading(true);
     try {
       await signupWithEmail(email, password);
-      router.push('/');
+      // The redirect is now handled by the login page listening to auth state.
     } catch (error: any) {
        toast({
         variant: "destructive",
