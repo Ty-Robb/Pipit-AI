@@ -1,22 +1,34 @@
-# **App Name**: Pipit AI: Strategy Wingman
+# Pipit: AI Strategy Wingman - Blueprint
 
-## Core Features:
+## 1. Vision & Core Features
 
-- Ethan, the AI Consultant: AI Consultant (Ethan): Text-based guidance through structured marketing strategy workflows, adapting based on workflow and user input. Maintains context across interactions. Uses Vertex AI.
-- Website Assessment: AI-powered tool: Ethan uses reasoning to assess websites relevant to user content creation/strategy. Uses external information access & assessment to gather data and generate reports. Uses Vertex AI.
-- Strategy Workflows: Structured Marketing Strategy Workflows: 22 workflows across Discovery, Foundation, Analysis, Customer Understanding, Positioning, Go-to-Market, Operations, and Measurement.
-- Split-Screen Interface: Split-Screen UI: Left pane for chat with Ethan; Right pane for evolving strategic outputs, reports, marketing content, document views, or website assessment results.
-- Content Creation: Marketing Content Generation: Upon strategy completion, generate marketing content (text, image concepts, video script ideas) informed by strategic insights and potentially enriched by information gathered by the tool that performs website assessments. Uses Vertex AI.
-- Document Handling: Intelligent Document Handling: Upload, view (Right Pane), and perform generative AI insight extraction for secure PDFs, and build PDFs/Docs from strategic outputs or marketing content.
-- Workflow Management: Workflow Management: Select, start, pause, and resume workflows. Maintain workflow state for resumption, and basic user authentication.
+Pipit is an AI-guided marketing strategy platform where users work with "Ethan," an AI strategic consultant, through conversational workflows to build their marketing strategy.
 
-## Style Guidelines:
+### Core Features:
 
-- Primary color: Amethyst (#9966CC) to convey creativity and strategic thinking.
-- Background color: Light Gray (#F0F0F0) for a clean, neutral backdrop.
-- Accent color: Emerald (#50C878) for calls to action, emphasizing growth and action.
-- Headline font: Serif font for a professional, readable presentation. The user request is followed; note: currently only Google Fonts are supported.
-- Body text font: 'Inter' (sans-serif) for clarity and modernity in the body text.
-- Icons: Clear, professional, flat, geometric style for a modern, intuitive interface.
-- Layout: Consistent split-screen design with AI Chat on the Left and Output/View on the Right for clear workflow and presentation.
-- Animations: Subtle animations for data loading and report generation, providing a smooth user experience.
+-   **AI Consultant (Ethan)**: Provides text-based guidance through structured marketing strategy workflows, adapting based on user input and maintaining context. Built with **Genkit**.
+-   **Strategy Workflows**: A series of structured workflows covering Discovery, Go-to-Market, and more.
+-   **Website Assessment**: An AI-powered tool to assess websites and generate strategic reports.
+-   **Content Creation**: Generates marketing content (text, image concepts, video scripts) informed by the strategy.
+-   **Split-Screen UI**: A clear interface with chat on the left and evolving strategic outputs on the right.
+-   **Document Handling**: Upload, view, and extract insights from PDF documents.
+-   **Authentication**: Secure user authentication and workflow state management using **Firebase**.
+
+## 2. Technical Architecture
+
+The application is a **Next.js** monolith that leverages the **Vercel AI SDK** and **Genkit** for its core AI functionality.
+
+-   **Frontend**: Built with Next.js and React.
+-   **UI Components**: Utilizes the **Shadcn UI** library for a consistent and professional look and feel.
+-   **AI and Workflows**: Managed directly within the Next.js application using **Genkit** flows located in the `src/ai` directory.
+-   **Authentication & Database**: **Firebase** for user authentication and data persistence.
+
+## 3. Style Guidelines
+
+-   **Primary Color**: Amethyst (`#9966CC`) - Conveys creativity and strategic thinking.
+-   **Background Color**: Light Gray (`#F0F0F0`) - A clean, neutral backdrop.
+-   **Accent Color**: Emerald (`#50C878`) - Emphasizes calls to action and growth.
+-   **Fonts**: A professional serif for headlines and 'Inter' (sans-serif) for body text to ensure clarity and modernity.
+-   **Icons**: Clear, flat, geometric style for a modern and intuitive interface.
+
+For a detailed look at post-launch features and the long-term vision, please see the [Project Roadmap](docs/roadmap.md).

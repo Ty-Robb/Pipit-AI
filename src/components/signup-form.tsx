@@ -46,15 +46,23 @@ export function SignupForm({ onLoginClick }: SignupFormProps) {
       await signupWithEmail(email, password);
       router.push('/');
     } catch (error: any) {
-       toast({
-        variant: "destructive",
-        title: "Signup Failed",
-        description: "Could not create account. Please try again.",
-      });
+      if (error.code === 'auth/email-already-in-use') {
+        toast({
+          variant: "destructive",
+          title: "Signup Failed",
+          description: "This email is already in use.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Signup Failed",
+          description: "Could not create account. Please try again.",
+        });
+      }
     } finally {
         setIsLoading(false);
     }
-  };
+  };``
 
   return (
     <Card>
