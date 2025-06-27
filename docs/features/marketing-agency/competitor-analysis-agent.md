@@ -21,123 +21,58 @@ The agent leverages web search capabilities to enhance its guidance with real-ti
 - Finds recent news, developments, or announcements about competitors
 - Researches industry trends and competitive dynamics
 - Finds market share data and competitive positioning information
-- Researches competitor marketing campaigns and messaging
-- Finds information about competitor products, services, and pricing
 
 ## Implementation Details
 
-The Competitor Analysis Agent is implemented as an ADK agent with the following components:
+The Competitor Analysis Agent is implemented as a Genkit flow within the Pipit application:
 
-- **agent.py**: Defines the LlmAgent and processing function
-- **prompt.py**: Contains the detailed prompt that guides the agent's behavior
-- **__init__.py**: Exports the agent and processing function
-- **test_competitor_agent.py**: Contains unit tests for the agent
-- **README.md**: Documentation for the agent
-
-## Usage Example
-
-```python
-from adk_agents.workflow_agents.sub_agents.competitor_analysis_agent import competitor_analysis_agent, process_competitor_analysis_agent
-
-# Basic usage
-response = competitor_analysis_agent("I need help analyzing my competitors in the software industry")
-
-# Advanced usage with context
-response = process_competitor_analysis_agent(
-    user_message="I need help analyzing my competitors in the software industry",
-    context="We are a SaaS company providing project management tools",
-    industry="Software / Technology",
-    key_competitors="Asana, Monday.com, Trello, ClickUp",
-    # Additional parameters as needed
-)
-
-# Process the agent's response
-print(response.content)
-```
-
-## Integration with Ethan Coordinator
-
-The Competitor Analysis Agent is integrated into the Ethan Coordinator workflow in the "Market Insights" section:
-
-```python
-# In ethan_coordinator.py
-from .sub_agents.competitor_analysis_agent.agent import competitor_analysis_agent
-
-# ...
-
-ethan_coordinator = LlmAgent(
-    # ...
-    tools=[
-        # ...
-        # Section 2: Market Insights
-        AgentTool(agent=market_insights_agent),
-        AgentTool(agent=competitor_analysis_agent),
-        # ...
-    ],
-)
-```
+- **Location**: `src/ai/flows/competitor-analysis.ts`
+- **Key Components**:
+  - A Genkit `flow` that defines the conversational logic.
+  - Zod schemas for input and output validation.
+  - Tools for web search and data persistence.
 
 ## Output Deliverables
 
 The agent helps users create:
 
-1. **Competitor Profiles**: Detailed profiles of key competitors with essential information
-2. **Positioning Map**: Visual representation of how competitors position themselves in the market
-3. **Product/Service Comparison Matrix**: Side-by-side comparison of features, benefits, and limitations
-4. **Marketing Channel Analysis**: Overview of competitor marketing strategies and effectiveness
-5. **SWOT Analysis**: Detailed SWOT analysis for each key competitor
-6. **Competitive Strategy Plan**: Actionable strategies to gain competitive advantage
+1. **Competitor Profiles**: Detailed profiles of key competitors with essential information.
+2. **Positioning Map**: Visual representation of how competitors position themselves in the market.
+3. **Product/Service Comparison Matrix**: Side-by-side comparison of features, benefits, and limitations.
+4. **Marketing Channel Analysis**: An overview of competitor marketing strategies and effectiveness.
+5. **SWOT Analysis**: A detailed SWOT analysis for each key competitor.
+6. **Competitive Strategy Plan**: Actionable strategies to gain a competitive advantage.
 
 ## Six-Phase Framework
 
 The agent guides users through a structured six-phase framework for competitor analysis:
 
-### Phase 1: Competitor Identification & Profiling
-- Identify primary and secondary competitors
-- Create detailed competitor profiles
-- Categorize competitors (direct, indirect, potential)
-- Prioritize competitors based on strategic importance
-- Document key competitor attributes
+1.  **Phase 1: Competitor Identification & Profiling**: Identify and create detailed profiles of key competitors.
+2.  **Phase 2: Market Positioning Analysis**: Analyze how competitors position themselves in the market.
+3.  **Phase 3: Product & Service Comparison**: Conduct detailed comparisons of competitor products and services.
+4.  **Phase 4: Marketing & Communication Analysis**: Analyze competitor marketing strategies and tactics.
+5.  **Phase 5: SWOT Analysis**: Conduct a comprehensive SWOT analysis for each key competitor.
+6.  **Phase 6: Competitive Strategy Development**: Develop actionable strategies based on the analysis.
 
-### Phase 2: Market Positioning Analysis
-- Analyze how competitors position themselves
-- Identify each competitor's unique value proposition
-- Analyze competitor brand messaging
-- Identify target market segments
-- Analyze pricing strategies
-- Identify market gaps and opportunities
+## Integration with Other Flows
 
-### Phase 3: Product & Service Comparison
-- Compare competitor products/services in detail
-- Identify key features, benefits, and limitations
-- Analyze product/service quality and performance
-- Evaluate product development pipelines
-- Identify unique selling points
-- Analyze customer reviews and feedback
-- Identify product gaps and opportunities
+The Competitor Analysis Agent is a modular component that can be called from other, more comprehensive flows.
 
-### Phase 4: Marketing & Communication Analysis
-- Analyze competitor marketing strategies and tactics
-- Evaluate website design and content
-- Analyze social media presence and engagement
-- Evaluate content marketing approach
-- Analyze advertising campaigns and messaging
-- Identify marketing channel priorities
-- Identify marketing opportunities
+```typescript
+// A simplified example of how the competitor analysis flow might be called
+import { competitorAnalysisFlow } from './competitor-analysis';
+import { runFlow } from '@genkit-ai/flow';
 
-### Phase 5: SWOT Analysis
-- Conduct SWOT analysis for each key competitor
-- Identify patterns across competitors
-- Compare competitor SWOTs to the user's company
-- Identify industry-wide threats
-- Identify opportunities based on competitor gaps
-- Prioritize findings based on strategic importance
+async function runMarketingStrategy() {
+    // ... other strategy steps
 
-### Phase 6: Competitive Strategy Development
-- Develop strategies based on analysis findings
-- Create action plans to address competitive challenges
-- Develop differentiation strategies
-- Identify sustainable competitive advantages
-- Develop monitoring systems for competitor activities
-- Establish metrics to measure competitive performance
-- Create implementation timeline
+    const competitorAnalysisResult = await runFlow(competitorAnalysisFlow, {
+        industry: 'Software / Technology',
+        keyCompetitors: ['Asana', 'Monday.com', 'Trello'],
+        // ... other inputs
+    });
+
+    // ... continue with the rest of the strategy
+}
+```
+This modular approach allows for a clean separation of concerns and makes the agents reusable and easy to maintain.

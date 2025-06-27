@@ -1,75 +1,46 @@
 # File Upload and Vector Search
 
-This feature enables users to upload files, extract text content, and perform semantic searches using vector embeddings.
+This feature enables users to upload files, from which the system can extract text content and perform semantic searches using vector embeddings.
 
 ## Documentation
 
-- [File Upload Validation](./validation.md) - Detailed documentation on file validation features, error handling, and security rules
+- [File Upload Validation](./validation.md) - Detailed documentation on file validation features, error handling, and security rules.
 
 ## Components
 
 ### Frontend
 
-- **Upload Page**: Located at `/upload`, this page provides a user interface for:
-  - Uploading files with progress indication
-  - Searching through uploaded files using natural language queries
-  - Viewing and managing recently uploaded files
+- **Upload Component**: A React component that provides a user interface for uploading files and viewing upload progress.
+- **Search Component**: A component that allows users to search through their uploaded files using natural language queries.
+- **useStorage Hook**: A React hook that provides an interface to the file operations API.
 
-- **useStorage Hook**: A React hook that provides file operations:
-  - `uploadFile`: Upload a file to storage
-  - `searchFiles`: Search for files using vector similarity
-  - `getRecentFiles`: Get a list of recently uploaded files
-  - `deleteFile`: Delete a file from storage
+### Backend (Genkit Flows)
 
-### Backend
+- **File Processing Flow**: A Genkit flow (`src/ai/flows/process-file.ts`) that is triggered when a file is uploaded. This flow:
+  - Extracts text from the uploaded file (PDF, TXT, DOCX).
+  - Generates vector embeddings for the extracted text content.
+  - Stores the document metadata and embeddings in **Firestore**.
+- **File Search Flow**: A Genkit flow (`src/ai/flows/search-files.ts`) that:
+  - Takes a user's natural language query as input.
+  - Generates an embedding for the query.
+  - Performs a vector similarity search against the embeddings stored in Firestore.
+  - Returns a list of relevant files.
 
-- **FastAPI Server**: Handles file processing and vector search:
-  - Extracts text from uploaded files
-  - Generates vector embeddings for semantic search
-  - Stores document metadata and embeddings in MongoDB
-  - Provides search endpoints for vector similarity queries
+### Storage
 
-- **Firebase Storage**: Used for secure file storage:
-  - Stores the original uploaded files
-  - Provides secure access to files based on user authentication
-  - Handles file deletion and management
+- **Firebase Storage**: Used for secure file storage.
+  - Stores the original uploaded files.
+  - Provides secure access to files based on user authentication.
 
 ## Implementation Details
 
-### Mock Implementation
+The file upload and search functionality is implemented as follows:
 
-For development purposes, the current implementation uses mock data:
+1. The user uploads a file through the frontend UI.
+2. The file is sent to a Next.js API route that uploads it to Firebase Storage.
+3. The upload triggers the `process-file` Genkit flow.
+4. This flow extracts the text, generates embeddings, and stores the data in Firestore.
+5. When a user performs a search, the frontend calls another API route.
+6. This route invokes the `search-files` Genkit flow, which performs the vector search and returns the results.
 
-- The `useStorage` hook provides mock implementations of all file operations
-- Mock files are generated with sample content
-- Search results are simulated based on the query
-
-### Production Implementation
-
-For production, the mock implementations should be replaced with actual API calls to:
-
-1. Upload files to Firebase Storage
-2. Process files through the FastAPI backend
-3. Store vector embeddings in MongoDB
-4. Perform real semantic searches using vector similarity
-
-## Usage
-
-To use the file upload and search functionality:
-
-1. Navigate to `/upload` in the application
-2. Upload files using the file input
-3. Search for content using natural language queries
-4. View and manage uploaded files in the recent files section
-
-## Future Enhancements
-
-- Add support for more file types (currently supports PDF, text, and documents)
-- Implement batch uploading for multiple files
-- Add advanced search filters (date range, file type, etc.)
-- Improve vector search accuracy with fine-tuned embeddings
-- Add file categorization and tagging
-- Implement virus scanning for uploaded files
-- Add content analysis for sensitive information detection
-- Implement user-specific upload quotas
-- Add support for resumable uploads for very large files
+This architecture keeps the AI-related processing within our Genkit framework, ensuring a consistent and maintainable codebase.

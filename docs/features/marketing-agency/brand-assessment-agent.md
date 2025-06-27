@@ -1,6 +1,6 @@
 # Brand Assessment Agent
 
-The Brand Assessment Agent is a specialized AI agent that helps users evaluate their current brand perception in the market. This document provides an overview of the agent's implementation, capabilities, and integration with the Priority AI platform.
+The Brand Assessment Agent is a specialized AI agent that helps users evaluate their current brand perception in the market. This document provides an overview of the agent's implementation, capabilities, and integration with the Pipit platform.
 
 ## Overview
 
@@ -8,99 +8,62 @@ The Brand Assessment Agent guides users through a comprehensive brand assessment
 
 ## Implementation Details
 
-The agent is implemented as part of the workflow agents in the Priority AI platform:
+The agent is implemented as a Genkit flow within the Pipit application:
 
-- **Location**: `adk-agents/workflow_agents/sub_agents/brand_assessment_agent/`
-- **Key Files**:
-  - `__init__.py`: Exports the agent function
-  - `agent.py`: Contains the agent implementation
-  - `prompt.py`: Contains the conversation guidance
-  - `test_brand_assessment_agent.py`: Contains unit tests
+- **Location**: `src/ai/flows/brand-assessment.ts`
+- **Key Components**:
+  - A Genkit `flow` that defines the conversational logic.
+  - Zod schemas for input and output validation.
+  - Tools for web search and data persistence.
 
 ## Features
 
 The Brand Assessment Agent provides the following key features:
 
-1. **Brand Identity Analysis**: Evaluates the core elements of brand identity (name, logo, colors, typography, etc.)
-2. **Brand Perception Research**: Analyzes how customers and stakeholders perceive the brand
-3. **Brand Equity Assessment**: Measures the value and strength of the brand
-4. **Competitive Brand Analysis**: Compares the brand against key competitors
-5. **Brand Consistency Evaluation**: Assesses consistency across all brand touchpoints
-6. **Brand Alignment Check**: Determines if the brand aligns with business goals and values
+1. **Brand Identity Analysis**: Evaluates the core elements of brand identity.
+2. **Brand Perception Research**: Analyzes how customers and stakeholders perceive the brand.
+3. **Brand Equity Assessment**: Measures the value and strength of the brand.
+4. **Competitive Brand Analysis**: Compares the brand against key competitors.
+5. **Brand Consistency Evaluation**: Assesses consistency across all brand touchpoints.
+6. **Brand Alignment Check**: Determines if the brand aligns with business goals and values.
 
 ## Web Search Integration
 
 The agent leverages web search capabilities to enhance the brand assessment with real-time, data-driven insights:
 
-- Researches industry-specific brand identity elements and trends
-- Finds methodologies for measuring brand perception
-- Researches competitor brand positioning and strategies
-- Finds industry benchmarks for brand performance
+- Researches industry-specific brand identity elements and trends.
+- Finds methodologies for measuring brand perception.
+- Researches competitor brand positioning and strategies.
+- Finds industry benchmarks for brand performance.
 
 ## Output Deliverables
 
 The agent helps users create:
 
-1. **Brand Audit Report**: Comprehensive evaluation of all brand elements
-2. **Brand Strength Analysis**: Quantitative assessment of brand strength
-3. **Brand Gap Analysis**: Identification of gaps between current and desired brand state
-4. **Brand Improvement Roadmap**: Strategic plan for enhancing brand effectiveness
-5. **Brand Metrics Dashboard**: Framework for ongoing brand performance measurement
+1. **Brand Audit Report**: A comprehensive evaluation of all brand elements.
+2. **Brand Strength Analysis**: A quantitative assessment of brand strength.
+3. **Brand Gap Analysis**: Identification of gaps between the current and desired brand state.
+4. **Brand Improvement Roadmap**: A strategic plan for enhancing brand effectiveness.
+5. **Brand Metrics Dashboard**: A framework for ongoing brand performance measurement.
 
-## Integration with Ethan Coordinator
+## Integration with Other Flows
 
-The Brand Assessment Agent is integrated into the Ethan Coordinator workflow in the "Positioning & Messaging" section, following the Customer Understanding components (Persona Development, Customer Journey Map, and Buying Process).
+The Brand Assessment Agent is a modular component that can be called from other, more comprehensive flows.
 
-```python
-# In ethan_coordinator.py
-from .sub_agents.brand_assessment_agent.agent import brand_assessment_agent
+```typescript
+// A simplified example of how the brand assessment flow might be called
+import { brandAssessmentFlow } from './brand-assessment';
+import { runFlow } from '@genkit-ai/flow';
 
-# ...
+async function runMarketingStrategy() {
+    // ... other strategy steps
 
-ethan_coordinator = LlmAgent(
-    # ...
-    tools=[
-        # ...
-        # Customer Understanding
-        AgentTool(agent=buying_process_agent),
-        
-        # Positioning & Messaging
-        AgentTool(agent=brand_assessment_agent),
-        
-        # ...
-    ],
-)
+    const brandAssessmentResult = await runFlow(brandAssessmentFlow, {
+        personas: 'Our primary personas are project managers and team leads.',
+        // ... other inputs
+    });
+
+    // ... continue with the rest of the strategy
+}
 ```
-
-## Usage Example
-
-```python
-from adk_agents.workflow_agents.sub_agents.brand_assessment_agent import brand_assessment_agent
-
-# Call the agent with user message and optional context
-response = brand_assessment_agent(
-    user_message="I need to evaluate how my brand is currently perceived in the market.",
-    conversation_history=[],  # Optional: Previous conversation history
-    context="We are a B2B SaaS company in the project management space.",  # Optional: Business context
-    personas="Our primary personas are project managers and team leads.",  # Optional: Customer personas
-    journey="Our customers typically discover us through industry events.",  # Optional: Customer journey
-    buying_process="The buying process involves multiple stakeholders."  # Optional: Buying process
-)
-
-# Process the agent's response
-print(response.content)
-```
-
-## Relationship to UI Workflow
-
-This agent powers the Brand Strength Assessment workflow described in `docs/strategy-components/workflows/marketing-strategy/brand-assessment.md`. While the UI workflow document focuses on the user interface and interaction patterns, this agent provides the AI-powered conversation and analysis capabilities that drive the assessment process.
-
-## Future Enhancements
-
-Potential future enhancements for the Brand Assessment Agent include:
-
-1. Integration with brand monitoring tools and social listening platforms
-2. Enhanced competitive analysis using real-time market data
-3. Automated brand audit report generation with visualizations
-4. Industry-specific brand assessment templates and benchmarks
-5. Integration with brand asset management systems
+This modular approach allows for a clean separation of concerns and makes the agents reusable and easy to maintain.

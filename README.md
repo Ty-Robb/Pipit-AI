@@ -20,57 +20,59 @@ For more detailed information, please see the [full blueprint](docs/blueprint.md
 
 This checklist will help us track the progress of updating all the new documentation to ensure it's aligned with our Genkit architecture.
 
+_Last Updated: July 2, 2024_
+
 ### Core Docs
 
--   [ ] `docs/README.md`
--   [ ] `docs/blueprint.md`
--   [ ] `docs/roadmap.md`
--   [ ] `docs/workflows.md`
+-   [x] `docs/README.md` (Reviewed: 2024-07-02)
+-   [x] `docs/blueprint.md` (Reviewed: 2024-07-02)
+-   [x] `docs/roadmap.md` (Reviewed: 2024-07-02)
+-   [x] `docs/workflows.md` (Reviewed: 2024-07-02)
 
 ### Features
 
 -   **Marketing Agency**
-    -   [x] `docs/features/marketing-agency/integration.md`
-    -   [ ] `docs/features/marketing-agency/positioning-statement-agent.md`
-    -   [ ] `docs/features/marketing-agency/channel-strategy-agent.md`
-    -   [ ] `docs/features/marketing-agency/analytics-measurement-agent.md`
-    -   [ ] `docs/features/marketing-agency/product-development-agent.md`
-    -   [ ] `docs/features/marketing-agency/brand-assessment-agent.md`
-    -   [ ] `docs/features/marketing-agency/marketing-skills-assessment-agent.md`
-    -   [ ] `docs/features/marketing-agency/social-media-strategy-agent.md`
-    -   [ ] `docs/features/marketing-agency/competitor-analysis-agent.md`
-    -   [ ] `docs/features/marketing-agency/marketing-budget-agent.md`
-    -   [ ] `docs/features/marketing-agency/content-strategy-agent.md`
-    -   [ ] `docs/features/marketing-agency/messaging-agent.md`
-    -   [ ] `docs/features/marketing-agency/campaign-planning-agent.md`
-    -   [ ] `docs/features/marketing-agency/pricing-strategy-agent.md`
+    -   [x] `docs/features/marketing-agency/integration.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/positioning-statement-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/channel-strategy-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/analytics-measurement-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/product-development-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/brand-assessment-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/marketing-skills-assessment-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/social-media-strategy-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/competitor-analysis-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/marketing-budget-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/content-strategy-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/messaging-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/campaign-planning-agent.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/marketing-agency/pricing-strategy-agent.md` (Reviewed: 2024-07-02)
 -   **AI SDK**
-    -   [ ] `docs/features/ai-sdk/vertex-ai-sdk.md`
+    -   [x] `docs/features/ai-sdk/vertex-ai-sdk.md` (Reviewed: 2024-07-02)
 -   **File Upload**
-    -   [ ] `docs/features/file-upload/README.md`
-    -   [ ] `docs/features/file-upload/validation.md`
+    -   [x] `docs/features/file-upload/README.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/file-upload/validation.md` (Reviewed: 2024-07-02)
 -   **Misc Features**
-    -   [ ] `docs/features/document-export.md`
-    -   [ ] `docs/features/powerpoint-generation.md`
+    -   [x] `docs/features/document-export.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/features/powerpoint-generation.md` (Reviewed: 2024-07-02)
 
 ### Strategy Components
 
 -   **Root**
-    -   [ ] `docs/strategy-components/adk-migration-strategy.md`
-    -   [ ] `docs/strategy-components/adk-quick-start.md`
+    -   [x] `docs/strategy-components/adk-migration-strategy.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/strategy-components/adk-quick-start.md` (Reviewed: 2024-07-02)
     -   [ ] `docs/strategy-components/chat-driven-workflow-pattern.md`
     -   [ ] `docs/strategy-components/google-adk-marketing-agency-analysis.md`
     -   [ ] `docs/strategy-components/implementation-tracker.md`
     -   [ ] `docs/strategy-components/marketing-strategy-workflow.md`
     -   [ ] `docs/strategy-components/visual-components-integration.md`
 -   **Appendix**
-    -   [ ] `docs/strategy-components/appendix/conversation-approach-comparison.md`
-    -   [ ] `docs/strategy-components/appendix/strategic-discovery-case-study.md`
-    -   [ ] `docs/strategy-components/appendix/ty-v2-output.md`
-    -   [ ] `docs/strategy-components/appendix/NEW_WORKFLOW_CHECKLIST.md`
-    -   [ ] `docs/strategy-components/appendix/data-flow-appendix.md`
+    -   [x] `docs/strategy-components/appendix/conversation-approach-comparison.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/strategy-components/appendix/strategic-discovery-case-study.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/strategy-components/appendix/ty-v2-output.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/strategy-components/appendix/NEW_WORKFLOW_CHECKLIST.md` (Reviewed: 2024-07-02)
+    -   [x] `docs/strategy-components/appendix/data-flow-appendix.md` (Reviewed: 2024-07-02)
 -   **Workflows**
-    -   [ ] `docs/strategy-components/workflows/marketing-strategy/core-values.md`
+    -   [x] `docs/strategy-components/workflows/marketing-strategy/core-values.md` (Reviewed: 2024-07-02)
     -   [ ] `docs/strategy-components/workflows/marketing-strategy/marketing-budget.md`
     -   [ ] `docs/strategy-components/workflows/marketing-strategy/positioning-statement.md`
     -   [ ] `docs/strategy-components/workflows/marketing-strategy/persona.md`
@@ -99,6 +101,6 @@ This checklist will help us track the progress of updating all the new documenta
 
 ### Workflows
 
--   [ ] `docs/workflows/discovery.md`
--   [ ] `docs/workflows/marketing-strategy.md`
--   [ ] `docs/workflows/components.md`
+-   [x] `docs/workflows/discovery.md` (Reviewed: 2024-07-02)
+-   [x] `docs/workflows/marketing-strategy.md` (Reviewed: 2024-07-02)
+-   [x] `docs/workflows/components.md` (Reviewed: 2024-07-02)
