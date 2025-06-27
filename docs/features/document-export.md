@@ -6,48 +6,26 @@ The Document Export feature allows users to export workflow results as PDF or Po
 
 The Document Export feature consists of the following components:
 
-1. **Backend API**: A FastAPI endpoint that generates PDF and PowerPoint documents from workflow data.
-2. **Frontend Service**: A TypeScript service that communicates with the backend API.
+1. **Backend (Genkit Flow)**: A Genkit flow that generates PDF and PowerPoint documents from workflow data.
+2. **Frontend Service**: A TypeScript service that communicates with the backend API route that triggers the Genkit flow.
 3. **UI Component**: A dropdown menu component that allows users to select the export format.
 
 ## Backend Implementation
 
-The backend implementation includes:
+The backend implementation is a Genkit flow that:
 
-- `DocumentExportService`: A service that generates PDF and PowerPoint documents from workflow data.
-- `ExportDocumentRequest` and `ExportDocumentResponse` models: Data models for the API request and response.
-- `/api/export/document` endpoint: A FastAPI endpoint that handles document export requests.
-
-### Document Generation
-
-The document generation process involves:
-
-1. Creating a temporary file for the document.
-2. Generating the document content based on the workflow type and data.
-3. Uploading the document to Firebase Storage.
-4. Returning the document URL and metadata to the client.
-
-#### PDF Generation
-
-PDF documents are generated using the ReportLab library. The document includes:
-
-- A title page with the workflow title and generation date.
-- Sections for each component of the workflow data.
-- Formatted text, tables, and lists as appropriate for the workflow type.
-
-#### PowerPoint Generation
-
-PowerPoint documents are generated using the python-pptx library. The presentation includes:
-
-- A title slide with the workflow title and generation date.
-- Slides for each component of the workflow data.
-- Formatted text, tables, and charts as appropriate for the workflow type.
+- Is triggered by a Next.js API route.
+- Receives the workflow data and desired export format as input.
+- Uses libraries like `pdf-lib` for PDF generation and a suitable library for PowerPoint generation (e.g., `pptxgenjs`).
+- Creates the document in memory or as a temporary file.
+- Uploads the document to Firebase Storage.
+- Returns the document URL to the client.
 
 ## Frontend Implementation
 
 The frontend implementation includes:
 
-- `document-export-service.ts`: A service that communicates with the backend API.
+- `document-export-service.ts`: A service that communicates with the backend API route.
 - `document-export-dropdown.tsx`: A dropdown menu component that allows users to select the export format.
 
 ### Integration with Workflow Chat
@@ -62,15 +40,15 @@ To use the Document Export feature:
 2. Complete the workflow to generate data.
 3. Click the "Export" button in the chat header.
 4. Select the desired export format (PDF or PowerPoint).
-5. The document will be generated and opened in a new tab.
+5. The document will be generated and downloaded.
 
 ## Security
 
 The Document Export feature includes the following security measures:
 
-- Authentication: Only authenticated users can export documents.
-- Authorization: Users can only export documents for workflows they have access to.
-- Secure Storage: Documents are stored in Firebase Storage with appropriate security rules.
+- **Authentication**: Only authenticated users can export documents.
+- **Authorization**: Users can only export documents for workflows they have access to.
+- **Secure Storage**: Documents are stored in Firebase Storage with appropriate security rules.
 
 ## Future Enhancements
 

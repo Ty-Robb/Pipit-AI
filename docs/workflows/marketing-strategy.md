@@ -20,19 +20,6 @@ Establish the core identity and direction of your marketing strategy.
 - **Mission Statement**: Industry-specific templates aligned with business model
 - **Core Values**: Interactive value selection and prioritization
 
-**Data Captured**:
-```typescript
-foundations: {
-  vision: string,
-  mission: string,
-  coreValues: Array<{
-    value: string,
-    description: string,
-    priority: number
-  }>
-}
-```
-
 ### Section 2: Market Insights
 
 Understand the market landscape and identify opportunities.
@@ -41,10 +28,6 @@ Understand the market landscape and identify opportunities.
 - **Market Segmentation**: Target audience definition with personas
 - **Market Analysis**: Industry trends and growth opportunities
 - **Competitive Landscape**: Positioning map and differentiation analysis
-
-**Integration Points**:
-- Vector search for industry insights
-- Marketing agency API for competitive research
 
 ### Section 3: Strategy Plan
 
@@ -55,11 +38,6 @@ Define strategic approach and market positioning.
 - **Market Positioning**: Positioning statement and brand personality
 - **Unique Selling Proposition**: USP development with proof points
 
-**Visual Elements**:
-- Goal timeline tracker
-- Positioning canvas
-- USP builder with examples
-
 ### Section 4: Tactics
 
 Define execution channels and tactical approaches.
@@ -68,10 +46,6 @@ Define execution channels and tactical approaches.
 - **Channel Selection**: Marketing channel assessment and prioritization
 - **Content Strategy**: Content types, themes, and publishing calendar
 - **Pricing Strategy**: Pricing model with competitive analysis
-
-**Integration Points**:
-- Marketing agency for website/content creation
-- Domain name suggestions based on strategy
 
 ### Section 5: Implementation
 
@@ -82,11 +56,6 @@ Create actionable implementation plans.
 - **Resource Allocation**: Team responsibilities and skill gap analysis
 - **Timeline & Milestones**: 90-day quick wins to annual objectives
 
-**Visual Elements**:
-- Budget planner
-- Resource allocation chart
-- Gantt chart or timeline view
-
 ### Section 6: Performance
 
 Define success metrics and tracking mechanisms.
@@ -95,11 +64,6 @@ Define success metrics and tracking mechanisms.
 - **KPI Definition**: Primary KPIs with baselines and targets
 - **Metrics Framework**: Leading vs lagging indicators
 - **Effectiveness Analysis**: Review cycles and optimization triggers
-
-**Deliverables**:
-- KPI dashboard mockup
-- Metrics hierarchy
-- Performance tracking template
 
 ### Section 7: Risk Management
 
@@ -110,11 +74,6 @@ Identify and mitigate potential risks.
 - **Risk Identification**: Market, operational, and financial risks
 - **Mitigation Strategies**: Contingency planning and early warning indicators
 
-**Visual Elements**:
-- SWOT matrix
-- Risk assessment matrix
-- Risk mitigation plan
-
 ### Section 8: Reporting
 
 Establish ongoing tracking and reporting structure.
@@ -124,123 +83,36 @@ Establish ongoing tracking and reporting structure.
 - **Performance Tracking**: Actual vs planned with variance analysis
 - **Continuous Improvement**: Review processes and optimization workflows
 
-**Deliverables**:
-- Report template builder
-- Dashboard configuration
-- Improvement tracker
-
-## Key Features
-
-### Progressive Disclosure
-- Each section builds on previous ones
-- Save and resume at any point
-- Skip options for experienced users
-
-### Context Awareness
-- Pulls insights from Discovery assessment
-- Adapts questions based on industry/size
-- Suggests best practices for context
-
-### AI Assistance
-- Content generation for all text elements
-- Industry-specific recommendations
-- Competitive insights from vector search
-- Real-time validation and suggestions
-
-### Visual Integration
-- Every section has accompanying visuals
-- Editable templates and frameworks
-- Export-ready charts and graphics
-- Professional document generation
-
-## Data Flow
-
-### From Discovery to Strategy
-When starting from the Discovery workflow:
-```typescript
-marketingStrategyContext = {
-  discoveryData: {
-    companyName: discovery.company_name,
-    industry: discovery.business_context.industry,
-    companySize: discovery.business_context.company_size,
-    keyStrengths: discovery.strengths,
-    priorityGaps: discovery.gaps,
-    strategicMaturity: discovery.overall_score
-  },
-  prefilledSections: {
-    foundations: {
-      suggestedFocus: basedOnGaps,
-      industryContext: basedOnIndustry
-    }
-  }
-}
-```
-
-### Bidirectional Updates
-- Chat inputs update visual components in real-time
-- Visual component changes inform chat context
-- All data persisted via Workflow API
-
-## Output Options
-
-### Primary Deliverables
-- **Complete Strategy Document**: Professional PDF/DOCX
-- **Executive Summary**: 2-page overview
-- **Implementation Checklist**: Actionable task list
-- **Presentation Deck**: Board-ready slides
-
-### Integration Options
-- Export to project management tools
-- Calendar integration for milestones
-- Team collaboration features
-- Progress tracking dashboard
-
-## Best Practices
-
-1. **Complete Discovery First**: The workflow works best with Discovery insights
-2. **Involve Key Stakeholders**: Use collaborative features for team input
-3. **Be Specific**: The more detail provided, the better the recommendations
-4. **Review Regularly**: Revisit and update strategy quarterly
-
 ## Technical Implementation
 
-### Architecture Pattern
-```typescript
-// Each section follows this pattern
-export default function MarketingStrategySection() {
-  const { sectionData, setSectionData } = useMarketingStrategy();
+The Marketing Strategy Workflow is implemented as a series of interconnected Genkit flows. Each section of the workflow corresponds to a main flow that, in turn, calls other, more specialized flows (our "agents") to handle specific tasks.
 
-  return (
-    <AIProvider tenantId="marketing-strategy">
-      <ResizablePanelGroup>
-        <ResizablePanel>
-          <ChatInterface section={currentSection} />
-        </ResizablePanel>
-        <ResizablePanel>
-          <VisualComponents data={sectionData} />
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </AIProvider>
-  );
-}
+### Architecture Pattern
+
+```typescript
+// Simplified example of the main marketing strategy flow
+import { defineFlow, runFlow } from '@genkit-ai/flow';
+import { z } from 'zod';
+import { visionStatementFlow } from './vision-statement';
+// ... import other sub-flows
+
+export const marketingStrategyFlow = defineFlow(
+  {
+    name: 'marketingStrategyFlow',
+    inputSchema: z.any(), // Will be defined based on required inputs
+    outputSchema: z.any(), // Will be defined based on the final strategy document
+  },
+  async (input) => {
+    // Section 1: Foundations
+    const vision = await runFlow(visionStatementFlow, input);
+    // ... run mission and core values flows
+
+    // ... continue through all 8 sections
+
+    // Return the complete strategy document
+    return { ... };
+  }
+);
 ```
 
-### State Management
-- Section progress tracked in workflow state
-- Auto-save functionality
-- Version history for iterations
-- Export state for document generation
-
-## Next Steps
-
-After completing the Marketing Strategy workflow:
-1. **Implementation Tracking**: Monitor progress against plan
-2. **Quarterly Reviews**: Update strategy based on results
-3. **Specialized Workflows**: Deep-dive into specific areas
-4. **Team Training**: Onboard team to strategy execution
-
-## Related Documentation
-
-- [Discovery Workflow](./discovery.md) - Strategic assessment process
-- [Chat-Driven Workflow Pattern](../strategy-components/chat-driven-workflow-pattern.md) - Technical implementation
-- [Visual Components Integration](../strategy-components/visual-components-integration.md) - UI/UX patterns
+This modular, flow-based architecture allows for a clean separation of concerns and makes the individual components of the marketing strategy workflow reusable and easy to maintain.

@@ -1,161 +1,105 @@
-# Quick Start: Why Copy ADK First?
+# Genkit Quick Start
 
-## The "Copy First, Customize Later" Approach
+This document provides a quick start guide for developing AI-powered workflows using Genkit within the Pipit application.
+
+## The "Genkit-Native" Approach
 
 ### Why This Works
 
-1. **Start with Success**: Google's ADK Marketing Agency is already tested and working
-2. **Learn by Doing**: Understanding how it works before modifying reduces errors
-3. **Gradual Risk**: Your existing platform keeps running while you experiment
-4. **Clear Baseline**: You know what "working" looks like before customizing
-
-## Implementation Path
-
-```
-Week 1-2: Copy & Run
-↓
-"I have ADK running locally!"
-↓
-Week 2-3: Build Bridge
-↓
-"My TypeScript app can talk to ADK!"
-↓
-Week 3-4: Feature Flag Integration
-↓
-"Some components use ADK, others use OpenAI!"
-↓
-Week 4-6: Add Your Magic
-↓
-"ADK now handles my custom workflows!"
-↓
-Week 6-7: Production
-↓
-"Fully integrated and enhanced!"
-```
+1.  **Simplicity**: We have one codebase, one deployment process, and one language (TypeScript) to manage.
+2.  **Seamless Integration**: There are no network calls between our frontend and our AI "backend." We can directly call our Genkit flows from our Next.js API routes.
+3.  **Developer Experience**: Our team can stay in a single context (TypeScript) without needing to switch between languages and environments.
 
 ## Minimal First Steps
 
-### Day 1: Just Get It Running
-```bash
-# Clone ADK samples
-git clone https://github.com/google/adk-samples.git
+### Day 1: Create a New Flow
 
-# Copy marketing agency
-cp -r adk-samples/python/agents/marketing-agency ~/my-project/adk-test
+Create a new file in `src/ai/flows` (e.g., `src/ai/flows/my-new-flow.ts`).
 
-# Set up environment
-cd ~/my-project/adk-test
-python -m venv venv
-source venv/bin/activate
-pip install poetry
-poetry install
-
-# Configure
-cp .env.example .env
-# Add your Google Cloud credentials
-
-# Run it!
-adk run marketing_agency
-```
-
-### Day 2-3: Wrap It in an API
-```python
-# simple_api.py
-from fastapi import FastAPI
-from marketing_agency import marketing_coordinator
-
-app = FastAPI()
-
-@app.post("/chat")
-async def chat(message: str):
-    result = await marketing_coordinator.process(message)
-    return {"response": result}
-
-# Run: uvicorn simple_api:app --reload
-```
-
-### Day 4-5: Connect from Next.js
 ```typescript
-// Quick test in your app
-const response = await fetch('http://localhost:8000/chat', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ message: 'help me create a cake business' })
-});
+// src/ai/flows/my-new-flow.ts
+import { defineFlow } from '@genkit-ai/flow';
+import { geminiPro } from 'genkitx-vertexai';
+import { z } from 'zod';
 
-const data = await response.json();
-console.log('ADK says:', data.response);
+export const myNewFlow = defineFlow(
+  {
+    name: 'myNewFlow',
+    inputSchema: z.string(),
+    outputSchema: z.string(),
+  },
+  async (prompt) => {
+    const llmResponse = await generate({
+      model: geminiPro,
+      prompt: prompt,
+    });
+
+    return llmResponse.text();
+  }
+);
 ```
 
-## Why Not Build From Scratch?
+### Day 2: Run and Test the Flow
 
-### ❌ Building From Scratch
-- Weeks of prompt engineering
-- Debugging agent coordination
-- Figuring out Google's APIs
-- Reinventing patterns ADK already solved
+You can use the Genkit developer UI to test your flows locally.
 
-### ✅ Copy & Extend
-- Working in hours, not weeks
-- Google's prompt engineering included
-- Agent coordination already solved
-- Focus on your unique value-add
+```bash
+genkit start
+```
+
+This will start a local server with a UI where you can select your new flow, provide input, and see the results.
+
+### Day 3: Connect from the Frontend
+
+Create a Next.js API route to trigger your new flow.
+
+```typescript
+// src/app/api/my-new-flow/route.ts
+import { myNewFlow } from '@/ai/flows/my-new-flow';
+import { runFlow } from '@genkit-ai/flow';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(req: NextRequest) {
+  const { prompt } = await req.json();
+
+  try {
+    const result = await runFlow(myNewFlow, prompt);
+    return NextResponse.json({ result });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to run flow' }, { status: 500 });
+  }
+}
+```
 
 ## Your Custom Extensions
 
-Once ADK is working, add your platform's unique features:
+Once you have the basic flow working, you can extend it by adding tools.
 
-```python
-# Your custom agent
-audience_analysis_agent = LlmAgent(
-    name="audience_analysis",
-    instruction="Analyze target demographics using our framework...",
-    tools=[your_custom_tools]
-)
+```typescript
+// src/ai/tools/my-new-tool.ts
+import { defineTool } from '@genkit-ai/tool';
+import { z } from 'zod';
 
-# Add to coordinator
-enhanced_coordinator = LlmAgent(
-    tools=[
-        # Google's agents
-        AgentTool(agent=domain_create_agent),
-        AgentTool(agent=website_create_agent),
-        
-        # Your agents
-        AgentTool(agent=audience_analysis_agent),
-        AgentTool(agent=competitive_research_agent),
-    ]
-)
+export const myNewTool = defineTool(
+  {
+    name: 'myNewTool',
+    description: 'A tool that does something useful.',
+    inputSchema: z.string(),
+    outputSchema: z.string(),
+  },
+  async (input) => {
+    // ... do something useful ...
+    return `You said: ${input}`;
+  }
+);
 ```
 
-## Cost-Benefit Analysis
+You can then use this tool in your flow:
 
-### Time Investment
-- **Copy ADK**: 1-2 weeks to integrate
-- **Build Similar**: 2-3 months from scratch
+```typescript
+// src/ai/flows/my-new-flow.ts
+import { myNewTool } from '../tools/my-new-tool';
+// ... (rest of the file)
+```
 
-### Learning Curve
-- **Copy ADK**: Learn from working examples
-- **Build Similar**: Figure out everything yourself
-
-### Risk Level
-- **Copy ADK**: Low - you always have working code
-- **Build Similar**: High - many unknowns
-
-## The Bottom Line
-
-**YES, copy it exactly first!** Then:
-
-1. Get it running (Day 1)
-2. Understand how it works (Week 1)
-3. Connect to your app (Week 2)
-4. Add your features (Week 3-4)
-5. Replace their workflow with yours (Week 5-6)
-
-This approach gets you:
-- ✅ Immediate working prototype
-- ✅ Google's AI expertise
-- ✅ Proven agent patterns
-- ✅ Your custom features on top
-- ✅ Faster time to market
-
-Start copying today - you'll have a working AI agent system by end of week!
+This approach allows us to build and iterate on our AI features quickly and efficiently, all within a single, consistent codebase.
